@@ -34,12 +34,12 @@
         </StatusBar>
         <DockPanel>
             <StackPanel DockPanel.Dock="Left">
-                <Button>Console Output</Button>
-                <Button>Server Settings</Button>
-                <Button>Plugins</Button>
-                <Button>Application Settings</Button>
+                <Button Name="ShowConsoleOutputButton" Click="ShowConsoleOutputButton_Click">Console Output</Button>
+                <Button Name="ShowServerSettingsButton">Server Settings</Button>
+                <Button Name="ShowPluginsButton">Plugins</Button>
+                <Button Name="ShowAppSettingsButton" Click="ShowAppSettingsButton_Click">Application Settings</Button>
             </StackPanel>
-            <Frame x:Name="FrameView"></Frame>
+            <Frame NavigationUIVisibility="Hidden" x:Name="FrameView"></Frame>
         </DockPanel>
     </DockPanel>
 </Window>

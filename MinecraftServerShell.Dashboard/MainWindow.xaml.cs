@@ -25,5 +25,9 @@ namespace MinecraftServerShell.Dashboard
         {
             InitializeComponent();
         }
+
+        private void ShowConsoleOutputButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new ConsoleOutputPage();
+
+        private void ShowAppSettingsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new ApplicationSettingsPage();
     }
 }
