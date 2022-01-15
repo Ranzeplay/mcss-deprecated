@@ -6,12 +6,12 @@ namespace DemoPlugin
     {
         public void OnPluginLoad()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Plugin has been loaded!");
         }
 
         public void OnPluginUnload()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Plugin has been unloaded!");
         }
     }
 }
