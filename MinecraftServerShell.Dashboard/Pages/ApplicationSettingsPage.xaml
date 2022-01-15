@@ -15,19 +15,19 @@
         </Grid.RowDefinitions>
         <TextBlock Margin="24, 0, 0, 0" FontSize="22px" VerticalAlignment="Center">Application Settings</TextBlock>
         <StackPanel Grid.Row="1" Margin="10">
-            <StackPanel>
-                <Label>Server directory</Label>
+            <StackPanel Margin="4">
+                <TextBlock>Server directory</TextBlock>
                 <DockPanel>
                     <Button Margin="8, 0, 0, 0" DockPanel.Dock="Right" Name="ServerDirectorySelectionButton" Click="ServerDirectorySelectionButton_Click">Select</Button>
                     <TextBox Name="ServerDirectoryTextBox"></TextBox>
                 </DockPanel>
             </StackPanel>
-            <StackPanel>
-                <Label>Startup command (via cmd.exe)</Label>
+            <StackPanel Margin="4">
+                <TextBlock>Startup command (via cmd.exe)</TextBlock>
                 <TextBox Name="StartupCommandTextBox" LostFocus="StartupCommandTextBox_LostFocus"></TextBox>
             </StackPanel>
-            <StackPanel>
-                <Label>Plugin directory</Label>
+            <StackPanel Margin="4">
+                <TextBlock>Plugin directory</TextBlock>
                 <DockPanel>
                     <Button Margin="8, 0, 0, 0" DockPanel.Dock="Right"  Name="PluginDirectorySelectionButton" Click="PluginDirectorySelectionButton_Click">Select</Button>
                     <TextBox Name="PluginDirectoryTextBox"></TextBox>
