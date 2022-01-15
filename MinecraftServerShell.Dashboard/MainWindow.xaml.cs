@@ -1,4 +1,5 @@
-﻿using MinecraftServerShell.Dashboard.Pages;
+﻿using MinecraftServerShell.Dashboard.Managers;
+using MinecraftServerShell.Dashboard.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,16 @@ namespace MinecraftServerShell.Dashboard
         public MainWindow()
         {
             InitializeComponent();
+
+            PluginManager.LoadAllPlugins(AppSettingsManager.ReadOrCreateSettings().PluginDirectory);
         }
 
-        private void ShowConsoleOutputButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new ConsoleOutputPage();
+        private void ShowConsoleOutputButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = InternalInstance.ConsoleOutputPage;
 
         private void ShowAppSettingsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new ApplicationSettingsPage();
+
+        private void ShowServerSettingsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new MCServerSettings();
+
+        private void ShowPluginsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new PluginListPage();
     }
 }

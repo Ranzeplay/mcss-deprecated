@@ -29,14 +29,14 @@
         </Menu>
         <StatusBar DockPanel.Dock="Bottom" Background="BlueViolet" Foreground="White">
             <StatusBarItem Margin="4, 0, 0, 0">
-                <TextBlock>Ready</TextBlock>
+                <TextBlock Name="StatusBar">Ready</TextBlock>
             </StatusBarItem>
         </StatusBar>
         <DockPanel>
             <StackPanel DockPanel.Dock="Left">
                 <Button Name="ShowConsoleOutputButton" Click="ShowConsoleOutputButton_Click">Console Output</Button>
-                <Button Name="ShowServerSettingsButton">Server Settings</Button>
-                <Button Name="ShowPluginsButton">Plugins</Button>
+                <Button Name="ShowServerSettingsButton" Click="ShowServerSettingsButton_Click">Server Settings</Button>
+                <Button Name="ShowPluginsButton" Click="ShowPluginsButton_Click">Plugins</Button>
                 <Button Name="ShowAppSettingsButton" Click="ShowAppSettingsButton_Click">Application Settings</Button>
             </StackPanel>
             <Frame NavigationUIVisibility="Hidden" x:Name="FrameView" Margin="4"></Frame>
