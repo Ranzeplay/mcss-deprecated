@@ -8,7 +8,20 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ConsoleOutputPage">
 
-    <Grid>
-        <TextBlock Background="Black" FontFamily="Consolas" Foreground="White" Padding="10"></TextBlock>
-    </Grid>
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Name="StartServerButton" Click="StartServerButton_Click">Start</Button>
+                <Button Name="StopServerButton" Click="StopServerButton_Click">Stop</Button>
+                <Button Name="RestartServerButton">Restart</Button>
+            </ToolBar>
+        </ToolBarTray>
+        <DockPanel DockPanel.Dock="Bottom">
+            <Button DockPanel.Dock="Right" Margin="4, 0, 0, 0" Name="SendCommandButton" Click="SendCommandButton_Click">Send</Button>
+            <TextBox Name="CommandTextBox"></TextBox>
+        </DockPanel>
+        <ScrollViewer Name="OutputScrollViewer" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <TextBlock Background="Black" FontFamily="Consolas" Foreground="White" Padding="10" Name="ServerOutputTextBlock" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible"></TextBlock>
+        </ScrollViewer>
+    </DockPanel>
 </Page>

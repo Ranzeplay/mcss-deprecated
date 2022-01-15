@@ -39,7 +39,7 @@
                 <Button Name="ShowPluginsButton">Plugins</Button>
                 <Button Name="ShowAppSettingsButton" Click="ShowAppSettingsButton_Click">Application Settings</Button>
             </StackPanel>
-            <Frame NavigationUIVisibility="Hidden" x:Name="FrameView"></Frame>
+            <Frame NavigationUIVisibility="Hidden" x:Name="FrameView" Margin="4"></Frame>
         </DockPanel>
     </DockPanel>
 </Window>
