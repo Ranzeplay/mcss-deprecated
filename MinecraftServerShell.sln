@@ -7,11 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinecraftServerShell.Dashbo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{A407CCF8-E358-46A0-BCC9-335A6F920F28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCSS.ServerAPI", "Plugins\MCSS.ServerAPI\MCSS.ServerAPI.csproj", "{B9C03448-78C9-452E-87E6-AB81DBC05AB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCSS.ServerAPI", "Plugins\MCSS.ServerAPI\MCSS.ServerAPI.csproj", "{B9C03448-78C9-452E-87E6-AB81DBC05AB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5C1DC2EE-BE65-4772-BB09-7C3E09DF623C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoPlugin", "Plugins\Samples\DemoPlugin\DemoPlugin.csproj", "{16CBA29A-1391-4743-B82D-37108EB48221}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoPlugin", "Plugins\Samples\DemoPlugin\DemoPlugin.csproj", "{16CBA29A-1391-4743-B82D-37108EB48221}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinecraftServerShell.Core", "MinecraftServerShell.Core\MinecraftServerShell.Core.csproj", "{C84D34CA-7E5A-485E-95A2-1940DD80D963}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{16CBA29A-1391-4743-B82D-37108EB48221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16CBA29A-1391-4743-B82D-37108EB48221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16CBA29A-1391-4743-B82D-37108EB48221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C84D34CA-7E5A-485E-95A2-1940DD80D963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C84D34CA-7E5A-485E-95A2-1940DD80D963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C84D34CA-7E5A-485E-95A2-1940DD80D963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C84D34CA-7E5A-485E-95A2-1940DD80D963}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
