@@ -2,9 +2,8 @@
 using MCSS.ServerAPI.Interfaces.Events;
 using MCSS.ServerAPI.Interfaces.Events.PlayerEvents;
 using MCSS.ServerAPI.Interfaces.Events.ServerEvents;
-using MinecraftServerShell.Dashboard.Models;
-using MinecraftServerShell.Dashboard.Models.Enums;
-using MinecraftServerShell.Dashboard.Models.ViewModels;
+using MinecraftServerShell.Core.Models;
+using MinecraftServerShell.Core.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,9 +13,9 @@ using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinecraftServerShell.Dashboard.Managers
+namespace MinecraftServerShell.Core.Managers
 {
-    internal class PluginManager
+    public class PluginManager
     {
         private static PluginIndexModel ReadMetadata(Assembly assembly)
         {

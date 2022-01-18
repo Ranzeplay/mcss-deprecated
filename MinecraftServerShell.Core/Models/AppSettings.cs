@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinecraftServerShell.Dashboard.Models
+namespace MinecraftServerShell.Core.Models
 {
-    class AppSettings
+    public class AppSettings
     {
         public string ServerDirectory { get; set; }
 

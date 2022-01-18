@@ -1,4 +1,4 @@
-﻿using MinecraftServerShell.Dashboard.Managers;
+﻿using MinecraftServerShell.Core.Managers;
 using MinecraftServerShell.Dashboard.Pages;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
-using MinecraftServerShell.Dashboard.Managers;
-using MinecraftServerShell.Dashboard.Models.ViewModels;
+using MinecraftServerShell.Core.Managers;
+using MinecraftServerShell.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +30,7 @@ namespace MinecraftServerShell.Dashboard.Pages
         {
             InitializeComponent();
 
-            plugins = InternalInstance.PluginsEnabled.ConvertAll(p => p.Index);
+            plugins = Core.InternalInstance.PluginsEnabled.ConvertAll(p => p.Index);
             PluginListPanel.ItemsSource = plugins;
         }
 

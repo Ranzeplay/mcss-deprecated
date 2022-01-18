@@ -12,8 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MinecraftServerShell.Dashboard.Managers;
-using MinecraftServerShell.Dashboard.Models;
+using MinecraftServerShell.Core.Managers;
+using MinecraftServerShell.Core.Models;
 using Ookii.Dialogs.Wpf;
 
 namespace MinecraftServerShell.Dashboard.Pages

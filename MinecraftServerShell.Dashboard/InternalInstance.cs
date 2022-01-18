@@ -9,12 +9,8 @@ using System.Threading.Tasks;
 
 namespace MinecraftServerShell.Dashboard
 {
-    internal static class InternalInstance
+    public static class InternalInstance
     {
-        public static Process ServerProcess { get; set; } = new();
-
         public static ConsoleOutputPage ConsoleOutputPage { get; set; } = new();
-
-        public static List<PluginRegistry> PluginsEnabled { get; set; } = new();
     }
 }

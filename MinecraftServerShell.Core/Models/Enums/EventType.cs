@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinecraftServerShell.Dashboard.Models.Enums
+namespace MinecraftServerShell.Core.Models.Enums
 {
     public enum EventType
     {

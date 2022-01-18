@@ -1,4 +1,4 @@
-﻿using MinecraftServerShell.Dashboard.Managers;
+﻿using MinecraftServerShell.Core.Managers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,8 +35,8 @@ namespace MinecraftServerShell.Dashboard.Pages
 
             SetServerControls(true);
 
-            InternalInstance.ServerProcess.BeginOutputReadLine();
-            InternalInstance.ServerProcess.OutputDataReceived += (s, e) =>
+            Core.InternalInstance.ServerProcess.BeginOutputReadLine();
+            Core.InternalInstance.ServerProcess.OutputDataReceived += (s, e) =>
             {
                 Dispatcher.Invoke(() =>
                 {
@@ -45,11 +45,11 @@ namespace MinecraftServerShell.Dashboard.Pages
                 });
             };
 
-            InternalInstance.ServerProcess.Exited += (s, e) =>
+            Core.InternalInstance.ServerProcess.Exited += (s, e) =>
             {
                 Dispatcher.Invoke(() =>
                 {
-                    ServerOutputTextBlock.Text += $"[Process has exited with code {InternalInstance.ServerProcess.ExitCode}]\n";
+                    ServerOutputTextBlock.Text += $"[Process has exited with code {Core.InternalInstance.ServerProcess.ExitCode}]\n";
                     SetServerControls(false);
                 });
             };

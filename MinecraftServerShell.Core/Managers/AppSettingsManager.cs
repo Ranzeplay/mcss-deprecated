@@ -1,4 +1,4 @@
-﻿using MinecraftServerShell.Dashboard.Models;
+﻿using MinecraftServerShell.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MinecraftServerShell.Dashboard.Managers
+namespace MinecraftServerShell.Core.Managers
 {
-    internal class AppSettingsManager
+    public class AppSettingsManager
     {
         public const string AppSettingsFileName = "settings.json";
 

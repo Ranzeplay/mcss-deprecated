@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinecraftServerShell.Dashboard.Managers
+namespace MinecraftServerShell.Core.Managers
 {
-    internal class ServerManager
+    public class ServerManager
     {
         public static void StartServer()
         {

@@ -12,7 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MinecraftServerShell.Core\MinecraftServerShell.Core.csproj" />
     <ProjectReference Include="..\Plugins\MCSS.ServerAPI\MCSS.ServerAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Managers\" />
   </ItemGroup>
 
 </Project>
