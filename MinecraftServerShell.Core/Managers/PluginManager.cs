@@ -1,7 +1,5 @@
-﻿using MCSS.ServerAPI.Interfaces;
-using MCSS.ServerAPI.Interfaces.Events;
-using MCSS.ServerAPI.Interfaces.Events.PlayerEvents;
-using MCSS.ServerAPI.Interfaces.Events.ServerEvents;
+﻿using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
+using MinecraftServerShell.Core.Interfaces;
 using MinecraftServerShell.Core.Models;
 using MinecraftServerShell.Core.Models.Enums;
 using System;
@@ -42,60 +40,34 @@ namespace MinecraftServerShell.Core.Managers
             return null;
         }
 
-        private static PluginRegistry ReadPluginData(string path)
+        private static string? GetPluginEntry(Assembly assembly)
         {
-            var pluginAssembly = Assembly.LoadFrom(path);
-            var pluginRegistry = new PluginRegistry
+            try
             {
-                Index = ReadMetadata(pluginAssembly),
-                Path = path,
-                RegisteredEvents = new Dictionary<string, EventType>()
-            };
+                var entryClass = assembly.GetTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i.FullName == typeof(IPluginEntry).FullName));
 
-
-            foreach (var type in pluginAssembly.GetExportedTypes())
-            {
-                var interfaces = type.GetInterfaces();
-
-                if (interfaces.Contains(typeof(IPluginEntry)))
-                {
-                    pluginRegistry.PluginEntry = type.FullName;
-                }
-
-                // Check if current type is an event handler
-                if (interfaces.Contains(typeof(IPlayerChatEvent)))
-                {
-                    pluginRegistry.RegisteredEvents[type.FullName] = EventType.PlayerChat;
-                }
-                if (interfaces.Contains(typeof(IPlayerJoinEvent)))
-                {
-                    pluginRegistry.RegisteredEvents[type.FullName] = EventType.PlayerJoin;
-                }
-                if (interfaces.Contains(typeof(IPlayerLeaveEvent)))
-                {
-                    pluginRegistry.RegisteredEvents[type.FullName] = EventType.PlayerLeave;
-                }
-                if (interfaces.Contains(typeof(IServerStartEvent)))
-                {
-                    pluginRegistry.RegisteredEvents[type.FullName] = EventType.ServerStart;
-                }
-                if (interfaces.Contains(typeof(IServerStopEvent)))
-                {
-                    pluginRegistry.RegisteredEvents[type.FullName] = EventType.ServerStop;
-                }
-                if (interfaces.Contains(typeof(ICommandExecutionEvent)))
-                {
-                    pluginRegistry.RegisteredEvents[type.FullName] = EventType.CommandExecution;
-                }
+                return entryClass != null ? entryClass.FullName : null;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
 
-            return pluginRegistry;
+                return null;
+            }
         }
 
         public static void LoadPlugin(string path)
         {
-            var plugin = ReadPluginData(path);
-            if (plugin != null)
+            var assembly = Assembly.LoadFile(path);
+
+            var plugin = new PluginRegistry
+            {
+                Index = ReadMetadata(assembly),
+                PluginEntry = GetPluginEntry(assembly),
+                Path = path
+            };
+
+            if (plugin.PluginEntry != null && plugin.Index != null)
             {
                 InternalInstance.PluginsEnabled.Add(plugin);
             }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCSS.ServerAPI.Models
+namespace MinecraftServerShell.Core.Events
 {
     public class Location
     {

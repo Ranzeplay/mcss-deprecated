@@ -14,7 +14,5 @@ namespace MinecraftServerShell.Core.Models
         public string Path { get; set; }
 
         public string PluginEntry { get; set; }
-
-        public Dictionary<string, EventType> RegisteredEvents { get; set; }
     }
 }

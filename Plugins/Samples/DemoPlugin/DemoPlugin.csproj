@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MCSS.ServerAPI\MCSS.ServerAPI.csproj" />
+    <ProjectReference Include="..\..\..\MinecraftServerShell.Core\MinecraftServerShell.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

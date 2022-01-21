@@ -1,4 +1,4 @@
-﻿using MCSS.ServerAPI.Interfaces;
+﻿using MinecraftServerShell.Core.Interfaces;
 
 namespace DemoPlugin
 {
