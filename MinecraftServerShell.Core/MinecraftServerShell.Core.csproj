@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Plugins\MCSS.ServerAPI\MCSS.ServerAPI.csproj" />
+    <Folder Include="Events\CoreEvents\" />
   </ItemGroup>
 
 </Project>
