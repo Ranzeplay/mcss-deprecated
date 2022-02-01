@@ -73,14 +73,23 @@ namespace MinecraftServerShell.Core.Managers
             }
         }
 
-        public static void LoadAllPlugins(string directory)
+        public static bool LoadAllPlugins(string directory)
         {
-            foreach (var file in Directory.GetFiles(directory, "*.dll"))
+            try
             {
-                LoadPlugin(file);
-            }
+                foreach (var file in Directory.GetFiles(directory, "*.dll"))
+                {
+                    LoadPlugin(file);
+                }
 
-            InternalInstance.PluginsEnabled.RemoveAll(p => p == null);
+                InternalInstance.PluginsEnabled.RemoveAll(p => p == null);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

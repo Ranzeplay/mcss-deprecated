@@ -1,5 +1,6 @@
 ﻿using MinecraftServerShell.Core.Managers;
 using MinecraftServerShell.Dashboard.Pages;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,20 @@ namespace MinecraftServerShell.Dashboard
         {
             InitializeComponent();
 
-            PluginManager.LoadAllPlugins(AppSettingsManager.ReadOrCreateSettings().PluginDirectory);
+            var pluginLoadStatus = PluginManager.LoadAllPlugins(AppSettingsManager.ReadOrCreateSettings().PluginDirectory);
+
+            if (!pluginLoadStatus)
+            {
+                var dialog = new TaskDialog
+                {
+                    WindowTitle = Application.Current.MainWindow.Name,
+                    MainInstruction = "Failed to load plugins",
+                    Content = "Check your settings. Maybe it's bacause of your directory of plugins is not exist?",
+                    MainIcon = TaskDialogIcon.Error
+                };
+                dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
+                dialog.ShowDialog();
+            }
         }
 
         private void ShowConsoleOutputButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = InternalInstance.ConsoleOutputPage;
