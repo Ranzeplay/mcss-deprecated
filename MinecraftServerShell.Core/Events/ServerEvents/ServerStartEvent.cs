@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents
 {
     public class ServerStartEvent
     {
-        public event EventHandler<ServerStartEventArgs> ServerStart;
+        public event EventHandler<ServerStartEventArgs> ServerStart = null!;
 
         protected virtual void OnServerStart(ServerStartEventArgs e)
         {

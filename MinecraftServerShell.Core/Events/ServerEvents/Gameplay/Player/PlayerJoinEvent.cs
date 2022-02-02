@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 {
     public class PlayerJoinEvent
     {
-        public event EventHandler<PlayerJoinEventArgs> PlayerJoin;
+        public event EventHandler<PlayerJoinEventArgs> PlayerJoin = null!;
 
         protected void OnPlayerJoin(PlayerJoinEventArgs e)
         {
@@ -18,12 +18,12 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 
     public class PlayerJoinEventArgs
     {
-        public string PlayerName { get; set; }
+        public string PlayerName { get; set; } = null!;
 
-        public string NetworkAddress { get; set; }
+        public string NetworkAddress { get; set; } = null!;
 
-        public string EntityId { get; set; }
+        public string EntityId { get; set; } = null!;
 
-        public Location Location { get; set; }
+        public Location Location { get; set; } = null!;
     }
 }

@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay
 {
     public class CommandExecutionEvent
     {
-        public event EventHandler<CommandExecutionEventArgs> CommandExecution;
+        public event EventHandler<CommandExecutionEventArgs> CommandExecution = null!;
 
         protected virtual void OnCommandExecution(CommandExecutionEventArgs e)
         {
@@ -18,12 +18,12 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay
 
     public class CommandExecutionEventArgs : EventArgs
     {
-        public string Issuer { get; set; }
+        public string Issuer { get; set; } = null!;
 
-        public string CommandName { get; set; }
+        public string CommandName { get; set; } = null!;
 
-        public string[] CommandArgs { get; set; }
+        public string[] CommandArgs { get; set; } = null!;
 
-        public string RawData { get; set; }
+        public string RawData { get; set; } = null!;
     }
 }

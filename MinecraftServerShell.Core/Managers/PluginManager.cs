@@ -15,7 +15,7 @@ namespace MinecraftServerShell.Core.Managers
 {
     public class PluginManager
     {
-        private static PluginIndexModel ReadMetadata(Assembly assembly)
+        private static PluginIndexModel? ReadMetadata(Assembly assembly)
         {
             var pluginIndex = new PluginIndexModel();
 
@@ -46,7 +46,7 @@ namespace MinecraftServerShell.Core.Managers
             {
                 var entryClass = assembly.GetTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i.FullName == typeof(IPluginEntry).FullName));
 
-                return entryClass != null ? entryClass.FullName : null;
+                return entryClass?.FullName;
             }
             catch (Exception ex)
             {
@@ -64,7 +64,8 @@ namespace MinecraftServerShell.Core.Managers
             {
                 Index = ReadMetadata(assembly),
                 PluginEntry = GetPluginEntry(assembly),
-                Path = path
+                Path = path,
+                PluginAssembly = assembly
             };
 
             if (plugin.PluginEntry != null && plugin.Index != null)
@@ -75,21 +76,38 @@ namespace MinecraftServerShell.Core.Managers
 
         public static bool LoadAllPlugins(string directory)
         {
-            try
+            foreach (var file in Directory.GetFiles(directory, "*.dll"))
             {
-                foreach (var file in Directory.GetFiles(directory, "*.dll"))
-                {
-                    LoadPlugin(file);
-                }
-
-                InternalInstance.PluginsEnabled.RemoveAll(p => p == null);
-
-                return true;
+                LoadPlugin(file);
             }
-            catch (Exception)
+
+            InternalInstance.PluginsEnabled.RemoveAll(p => p == null);
+
+            // Run plugin OnLoad method
+            foreach (var plugin in InternalInstance.PluginsEnabled)
             {
-                return false;
+                var entry = plugin.PluginAssembly.GetType(plugin.PluginEntry);
+                var activator = Activator.CreateInstance(entry, null);
+                var loadMethod = entry.GetMethod(nameof(IPluginEntry.OnPluginLoad));
+
+                loadMethod.Invoke(activator, null);
             }
+
+            return true;
+        }
+
+        public static void UnloadAllPlugins(string directory)
+        {
+            foreach (var plugin in InternalInstance.PluginsEnabled)
+            {
+                var entry = plugin.PluginAssembly.GetType(plugin.PluginEntry);
+                var activator = Activator.CreateInstance(entry, null);
+                var unloadMethod = entry.GetMethod(nameof(IPluginEntry.OnPluginUnload));
+
+                unloadMethod.Invoke(activator, null);
+            }
+
+            InternalInstance.PluginsEnabled.Clear();
         }
     }
 }

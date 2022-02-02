@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 {
     public class PlayerChatEvent
     {
-        public event EventHandler<PlayerChatEventArgs> PlayerChat;
+        public event EventHandler<PlayerChatEventArgs> PlayerChat = null!;
 
         protected virtual void OnPlayerChat(PlayerChatEventArgs e)
         {
@@ -18,8 +18,9 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 
     public class PlayerChatEventArgs : EventArgs
     {
-        public string PlayerName { get; set; }
 
-        public string ChatMessage { get; set; }
+        public string PlayerName { get; set; } = null!;
+
+        public string ChatMessage { get; set; } = null!;
     }
 }

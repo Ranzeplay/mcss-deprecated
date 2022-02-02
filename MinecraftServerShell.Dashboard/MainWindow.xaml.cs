@@ -36,7 +36,7 @@ namespace MinecraftServerShell.Dashboard
                     WindowTitle = Application.Current.MainWindow.Name,
                     MainInstruction = "Failed to load plugins",
                     Content = "Check your settings. Maybe it's bacause of your directory of plugins is not exist?",
-                    MainIcon = TaskDialogIcon.Error
+                    MainIcon = TaskDialogIcon.Warning
                 };
                 dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
                 dialog.ShowDialog();

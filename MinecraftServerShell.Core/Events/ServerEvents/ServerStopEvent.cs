@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents
 {
     public class ServerStopEvent
     {
-        public event EventHandler<ServerStopEventArgs> ServerStop;
+        public event EventHandler<ServerStopEventArgs> ServerStop = null!;
 
         protected virtual void OnServerStop(ServerStopEventArgs e)
         {
