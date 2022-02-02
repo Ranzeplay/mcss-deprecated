@@ -8,15 +8,15 @@ namespace MinecraftServerShell.Core.Events.ServerEvents
 {
     public class ServerStartEvent
     {
-        public event EventHandler<ServerStartEventArgs> ServerStart = null!;
+        public static event EventHandler<ServerStartEventArgs> ServerStart = null!;
 
-        protected virtual void OnServerStart(ServerStartEventArgs e)
+        internal virtual void OnServerStart(ServerStartEventArgs e)
         {
             ServerStart?.Invoke(this, e);
         }
     }
 
-    public class ServerStartEventArgs: EventArgs
+    public class ServerStartEventArgs : EventArgs
     {
         public bool IsRestart { get; set; }
     }

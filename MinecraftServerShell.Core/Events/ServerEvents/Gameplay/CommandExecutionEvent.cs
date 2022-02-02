@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay
 {
     public class CommandExecutionEvent
     {
-        public event EventHandler<CommandExecutionEventArgs> CommandExecution = null!;
+        public static event EventHandler<CommandExecutionEventArgs> CommandExecution = null!;
 
         protected virtual void OnCommandExecution(CommandExecutionEventArgs e)
         {

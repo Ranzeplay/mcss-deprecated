@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 {
     public class PlayerJoinEvent
     {
-        public event EventHandler<PlayerJoinEventArgs> PlayerJoin = null!;
+        public static event EventHandler<PlayerJoinEventArgs> PlayerJoin = null!;
 
         protected void OnPlayerJoin(PlayerJoinEventArgs e)
         {

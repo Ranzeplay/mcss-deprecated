@@ -8,7 +8,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 {
     public class PlayerLeaveEvent
     {
-        public event EventHandler<PlayerLeaveEventArgs> PlayerLeave = null!;
+        public static event EventHandler<PlayerLeaveEventArgs> PlayerLeave = null!;
 
         protected void OnPlayerJoin(PlayerLeaveEventArgs e)
         {

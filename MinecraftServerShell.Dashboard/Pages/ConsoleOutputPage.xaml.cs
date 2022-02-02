@@ -64,7 +64,7 @@ namespace MinecraftServerShell.Dashboard.Pages
 
         private void StopServerButton_Click(object sender, RoutedEventArgs e)
         {
-            ServerManager.SendMessage("stop");
+            ServerManager.StopServer();
         }
 
         private void SetServerControls(bool value)

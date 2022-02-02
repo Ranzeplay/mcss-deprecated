@@ -6,18 +6,28 @@ using System.Threading.Tasks;
 
 namespace MinecraftServerShell.Core.Events.ServerEvents
 {
-    public class ServerStopEvent
+    public class ServerBeginStopEvent
     {
-        public event EventHandler<ServerStopEventArgs> ServerStop = null!;
+        public static event EventHandler<ServerStopEventArgs> ServerBeginStop = null!;
 
-        protected virtual void OnServerStop(ServerStopEventArgs e)
+        internal virtual void OnServerBeginStop(ServerStopEventArgs e)
         {
-            ServerStop?.Invoke(this, e);
+            ServerBeginStop?.Invoke(this, e);
         }
     }
 
     public class ServerStopEventArgs : EventArgs
     {
         public bool IsForceStop { get; set; }
+    }
+
+    public class ServerStoppedEvent
+    {
+        public static event EventHandler<ServerStopEventArgs> ServerStopped = null!;
+
+        internal virtual void OnServerStopped(ServerStopEventArgs e)
+        {
+            ServerStopped?.Invoke(this, e);
+        }
     }
 }

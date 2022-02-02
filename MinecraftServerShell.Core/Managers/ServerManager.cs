@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MinecraftServerShell.Core.Events.ServerEvents;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -30,12 +31,29 @@ namespace MinecraftServerShell.Core.Managers
                 EnableRaisingEvents = true
             };
 
+            new ServerStartEvent().OnServerStart(new ServerStartEventArgs());
+
             InternalInstance.ServerProcess.Start();
+            InternalInstance.ServerProcess.Exited += ServerProcess_Exited;
         }
 
         public static void SendMessage(string message)
         {
             InternalInstance.ServerProcess.StandardInput.WriteLine(message);
+        }
+
+        public static void StopServer()
+        {
+            if (!InternalInstance.ServerProcess.HasExited)
+            {
+                SendMessage("stop");
+                new ServerBeginStopEvent().OnServerBeginStop(new ServerStopEventArgs());
+            }
+        }
+
+        private static void ServerProcess_Exited(object? sender, EventArgs e)
+        {
+            new ServerStoppedEvent().OnServerStopped(new ServerStopEventArgs());
         }
     }
 }
