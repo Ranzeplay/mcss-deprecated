@@ -10,7 +10,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
     {
         public static event EventHandler<PlayerLeaveEventArgs> PlayerLeave = null!;
 
-        protected void OnPlayerJoin(PlayerLeaveEventArgs e)
+        internal void OnPlayerLeave(PlayerLeaveEventArgs e)
         {
             PlayerLeave?.Invoke(this, e);
         }

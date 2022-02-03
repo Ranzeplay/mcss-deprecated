@@ -10,7 +10,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
     {
         public static event EventHandler<PlayerChatEventArgs> PlayerChat = null!;
 
-        protected virtual void OnPlayerChat(PlayerChatEventArgs e)
+        internal virtual void OnPlayerChat(PlayerChatEventArgs e)
         {
             PlayerChat?.Invoke(this, e);
         }

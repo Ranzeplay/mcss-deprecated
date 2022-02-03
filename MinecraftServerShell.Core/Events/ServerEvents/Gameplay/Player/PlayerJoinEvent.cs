@@ -10,7 +10,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
     {
         public static event EventHandler<PlayerJoinEventArgs> PlayerJoin = null!;
 
-        protected void OnPlayerJoin(PlayerJoinEventArgs e)
+        internal void OnPlayerJoin(PlayerJoinEventArgs e)
         {
             PlayerJoin?.Invoke(this, e);
         }

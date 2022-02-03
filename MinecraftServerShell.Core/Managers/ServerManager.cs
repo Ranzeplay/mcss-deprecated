@@ -35,6 +35,8 @@ namespace MinecraftServerShell.Core.Managers
 
             InternalInstance.ServerProcess.Start();
             InternalInstance.ServerProcess.Exited += ServerProcess_Exited;
+
+            EventManager.SetupPlayerEvents();
         }
 
         public static void SendMessage(string message)
