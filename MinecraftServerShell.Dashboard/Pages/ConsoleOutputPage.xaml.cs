@@ -57,9 +57,7 @@ namespace MinecraftServerShell.Dashboard.Pages
 
         private void SendCommandButton_Click(object sender, RoutedEventArgs e)
         {
-            ServerManager.SendMessage(CommandTextBox.Text);
-            ServerOutputTextBlock.Text += $"$> {CommandTextBox.Text}\n";
-            CommandTextBox.Clear();
+            SendMessageToServer();
         }
 
         private void StopServerButton_Click(object sender, RoutedEventArgs e)
@@ -75,6 +73,21 @@ namespace MinecraftServerShell.Dashboard.Pages
 
             SendCommandButton.IsEnabled = value;
             CommandTextBox.IsEnabled = value;
+        }
+
+        private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SendMessageToServer();
+            }
+        }
+
+        private void SendMessageToServer()
+        {
+            ServerManager.SendMessage(CommandTextBox.Text);
+            ServerOutputTextBlock.Text += $"$> {CommandTextBox.Text}\n";
+            CommandTextBox.Clear();
         }
     }
 }
