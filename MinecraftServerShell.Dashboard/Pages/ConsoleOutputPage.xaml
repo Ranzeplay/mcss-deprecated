@@ -21,7 +21,15 @@
             <TextBox Name="CommandTextBox"></TextBox>
         </DockPanel>
         <ScrollViewer Name="OutputScrollViewer" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-            <TextBlock Background="Black" FontFamily="Consolas" Foreground="White" Padding="10" Name="ServerOutputTextBlock" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible"></TextBlock>
+            <TextBox Background="Black" 
+                     FontFamily="Consolas" 
+                     Foreground="White" 
+                     Padding="10" 
+                     Name="ServerOutputTextBlock" 
+                     ScrollViewer.CanContentScroll="True"
+                     IsReadOnly="True"
+                     BorderThickness="0"
+                     TextWrapping="Wrap"></TextBox>
         </ScrollViewer>
     </DockPanel>
 </Page>
