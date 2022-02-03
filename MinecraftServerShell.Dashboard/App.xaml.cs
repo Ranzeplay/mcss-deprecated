@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MinecraftServerShell.Core.Managers;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,16 @@ namespace MinecraftServerShell.Dashboard
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnExit(ExitEventArgs e)
+        {
+            if (!Core.InternalInstance.ServerProcess.HasExited)
+            {
+                ServerManager.StopServer();
+            }
+
+            PluginManager.UnloadAllPlugins(AppSettingsManager.ReadOrCreateSettings().PluginDirectory);
+
+            base.OnExit(e);
+        }
     }
 }
