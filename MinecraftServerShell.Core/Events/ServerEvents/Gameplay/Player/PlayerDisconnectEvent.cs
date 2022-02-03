@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 {
-    public class PlayerLeaveEvent
+    public class PlayerDisconnectEvent
     {
         public static event EventHandler<PlayerLeaveEventArgs> PlayerLeave = null!;
 

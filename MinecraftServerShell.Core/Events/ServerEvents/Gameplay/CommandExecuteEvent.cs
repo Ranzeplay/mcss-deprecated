@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay
 {
-    public class CommandExecutionEvent
+    public class CommandExecuteEvent
     {
         public static event EventHandler<CommandExecutionEventArgs> CommandExecution = null!;
 
