@@ -15,4 +15,16 @@ namespace MinecraftServerShell.Core.Models
 
         public string Message { get; set; }
     }
+
+    public class PluginLog : Log
+    {
+        public string PluginName { get; set; }
+    }
+
+    public class ServerLog : Log
+    {
+        public string Issuer { get; set; }
+
+        public string LogLevel { get; set; }
+    }
 }

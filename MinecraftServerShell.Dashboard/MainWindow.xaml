@@ -37,6 +37,7 @@
                 <Button Name="ShowConsoleOutputButton" Click="ShowConsoleOutputButton_Click">Console Output</Button>
                 <Button Name="ShowServerSettingsButton" Click="ShowServerSettingsButton_Click">Server Settings</Button>
                 <Button Name="ShowPluginsButton" Click="ShowPluginsButton_Click">Plugins</Button>
+                <Button Name="ShowLogsButton" Click="ShowLogsButton_Click">Logs</Button>
                 <Button Name="ShowAppSettingsButton" Click="ShowAppSettingsButton_Click">Application Settings</Button>
             </StackPanel>
             <Frame NavigationUIVisibility="Hidden" x:Name="FrameView" Margin="4"></Frame>

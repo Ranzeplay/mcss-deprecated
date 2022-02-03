@@ -12,5 +12,7 @@ namespace MinecraftServerShell.Dashboard
     public static class InternalInstance
     {
         public static ConsoleOutputPage ConsoleOutputPage { get; set; } = new();
+
+        public static LogPage LogPage { get; set; } = new();
     }
 }

@@ -50,5 +50,7 @@ namespace MinecraftServerShell.Dashboard
         private void ShowServerSettingsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new MCServerSettings();
 
         private void ShowPluginsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new PluginListPage();
+
+        private void ShowLogsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = InternalInstance.LogPage;
     }
 }

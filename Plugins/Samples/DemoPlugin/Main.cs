@@ -10,7 +10,7 @@ namespace DemoPlugin
     {
         public static Main? Instance = null;
 
-        protected LogManager LogManager = new(Resources.Name);
+        protected PluginLogManager LogManager = new(Resources.Name);
 
         public void OnPluginLoad()
         {

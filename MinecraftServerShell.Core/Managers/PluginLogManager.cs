@@ -7,22 +7,23 @@ using System.Threading.Tasks;
 
 namespace MinecraftServerShell.Core.Managers
 {
-    public class LogManager
+    public class PluginLogManager
     {
-        private string Prefix { get; }
+        private string PluginName { get; }
 
-        public LogManager(string prefix)
+        public PluginLogManager(string pluginName)
         {
-            Prefix = prefix;
+            PluginName = pluginName;
         }
 
-        protected static void Log(LogLevel level, string message)
+        protected void Log(LogLevel level, string message)
         {
-            InternalInstance.AppLog.PluginLog.Append(new Models.Log
+            InternalInstance.AppLog.PluginLog.Append(new Models.PluginLog
             {
                 Level = level,
-                Message = message,
+                Message = $"",
                 CreateTime = DateTime.Now,
+                PluginName = PluginName
             });
         }
 

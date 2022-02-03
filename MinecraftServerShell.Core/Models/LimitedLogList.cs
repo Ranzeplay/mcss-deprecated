@@ -12,11 +12,12 @@ namespace MinecraftServerShell.Core.Models
 
         private LinkedList<T> Elements { get; }
 
-        public event EventHandler<T> NewLog;
+        public event EventHandler<T> NewLog = null!;
 
         public LimitedLogList(long capacity)
         {
             Capacity = capacity;
+            Elements = new LinkedList<T>();
         }
 
         public void Append(T element)

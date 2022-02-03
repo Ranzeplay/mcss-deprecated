@@ -1,4 +1,6 @@
-﻿using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
+﻿using MinecraftServerShell.Core.Events.CoreEvents;
+using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
+using MinecraftServerShell.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,9 +36,9 @@ namespace MinecraftServerShell.Core.Managers
 
                     new PlayerJoinEvent().OnPlayerJoin(new PlayerJoinEventArgs
                     {
-                        PlayerName = match.Groups[0].Value,
-                        NetworkAddress = match.Groups[1].Value,
-                        EntityId = match.Groups[2].Value,
+                        PlayerName = match.Groups[1].Value,
+                        NetworkAddress = match.Groups[2].Value,
+                        EntityId = match.Groups[3].Value,
                         Location = new()
                         {
                             X = double.Parse(match.Groups[3].Value),
@@ -51,8 +53,8 @@ namespace MinecraftServerShell.Core.Managers
 
                     new PlayerDisconnectEvent().OnPlayerLeave(new PlayerLeaveEventArgs
                     {
-                        PlayerName = match.Groups[0].Value,
-                        Reason = match.Groups[1].Value,
+                        PlayerName = match.Groups[1].Value,
+                        Reason = match.Groups[2].Value,
                     });
                 }
                 else if (PlayerChatRegex.IsMatch(data))
@@ -61,11 +63,48 @@ namespace MinecraftServerShell.Core.Managers
 
                     new PlayerChatEvent().OnPlayerChat(new PlayerChatEventArgs
                     {
-                        PlayerName = match.Groups[0].Value,
-                        ChatMessage = match.Groups[1].Value,
+                        PlayerName = match.Groups[1].Value,
+                        ChatMessage = match.Groups[2].Value,
                     });
                 }
+
+                // Anyway, we need to broadcast ServerConsoleOutput
+                IssueServerOutputEvent(data);
             }
+        }
+
+        private static void IssueServerOutputEvent(string raw)
+        {
+            var serverLogRegex = new Regex("^\\[\\d{2}:\\d{2}:\\d{2}\\] \\[([^\\]]*)\\/([^/]*)\\]: ([\\s\\S]+)");
+            var serverLogMatch = serverLogRegex.Match(raw);
+
+            var logEntry = new ServerLog();
+            if (serverLogMatch.Success)
+            {
+                logEntry = new ServerLog
+                {
+                    CreateTime = DateTime.Now,
+                    Issuer = serverLogMatch.Groups[1].Value,
+                    LogLevel = serverLogMatch.Groups[2].Value,
+                    Message = serverLogMatch.Groups[3].Value,
+                };
+            }
+            else
+            {
+                logEntry = new ServerLog
+                {
+                    CreateTime = DateTime.Now,
+                    Issuer = "-",
+                    LogLevel = "-",
+                    Message = raw,
+                };
+            }
+
+
+            // Add it into log list
+            InternalInstance.AppLog.ServerLog.Append(logEntry);
+
+            new ServerConsoleOutputEvent().OnServerConsoleOutput(new ServerConsoleOutputEventArgs { LogEntry = logEntry });
         }
     }
 }

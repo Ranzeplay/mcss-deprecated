@@ -28,7 +28,7 @@ namespace MinecraftServerShell.Core
 
         public LimitedLogList<Log> ServerLog { get; set; }
 
-        public LimitedLogList<Log> PluginLog { get; set; }
+        public LimitedLogList<PluginLog> PluginLog { get; set; }
 
         public LimitedLogList<Log> OtherLog { get; set; }
     }
