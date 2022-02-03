@@ -13,5 +13,7 @@ namespace MinecraftServerShell.Core.Models
         public string StartupCommand { get; set; }
 
         public string PluginDirectory { get; set; }
+
+        public long MaxLogLength { get; set; }
     }
 }

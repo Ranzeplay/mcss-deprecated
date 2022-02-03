@@ -1,23 +1,31 @@
-﻿using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
+﻿using DemoPlugin.Properties;
+using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
 using MinecraftServerShell.Core.Interfaces;
+using MinecraftServerShell.Core.Managers;
 using System.Text.Json;
 
 namespace DemoPlugin
 {
     public class Main : IPluginEntry
     {
+        public static Main? Instance = null;
+
+        protected LogManager LogManager = new(Resources.Name);
+
         public void OnPluginLoad()
         {
-            Console.WriteLine("Plugin has been loaded!");
+            LogManager.LogInfo("Plugin has been loaded!");
 
-            PlayerJoinEvent.PlayerJoin += (sender, args) => Console.WriteLine("あれ？新人？　" + JsonSerializer.Serialize(args));
-            PlayerDisconnectEvent.PlayerLeave += (sender, args) => Console.WriteLine("やだ。。　" + JsonSerializer.Serialize(args));
-            PlayerJoinEvent.PlayerJoin += (sender, args) => Console.WriteLine("I heard someone chatting... " + JsonSerializer.Serialize(args));
+            Instance = this;
+
+            PlayerJoinEvent.PlayerJoin += (sender, args) => LogManager.LogInfo("あれ？新人？　" + JsonSerializer.Serialize(args));
+            PlayerDisconnectEvent.PlayerLeave += (sender, args) => LogManager.LogInfo("やだ。。　" + JsonSerializer.Serialize(args));
+            PlayerJoinEvent.PlayerJoin += (sender, args) => LogManager.LogInfo("I heard someone chatting... " + JsonSerializer.Serialize(args));
         }
 
         public void OnPluginUnload()
         {
-            Console.WriteLine("Plugin has been unloaded!");
+            LogManager.LogInfo("Plugin has been unloaded!");
         }
     }
 }

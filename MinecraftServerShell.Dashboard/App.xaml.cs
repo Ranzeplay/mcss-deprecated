@@ -1,4 +1,5 @@
-﻿using MinecraftServerShell.Core.Managers;
+﻿using MinecraftServerShell.Core;
+using MinecraftServerShell.Core.Managers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,12 +15,24 @@ namespace MinecraftServerShell.Dashboard
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            Core.InternalInstance.AppLog = new ApplicationLog(AppSettingsManager.ReadOrCreateSettings().MaxLogLength);
+
+            base.OnStartup(e);
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
-            if (!Core.InternalInstance.ServerProcess.HasExited)
+            try
             {
-                ServerManager.StopServer();
+                if (!Core.InternalInstance.ServerProcess.HasExited)
+                {
+                    ServerManager.StopServer();
+                }
             }
+            catch { }
+
 
             PluginManager.UnloadAllPlugins(AppSettingsManager.ReadOrCreateSettings().PluginDirectory);
 
