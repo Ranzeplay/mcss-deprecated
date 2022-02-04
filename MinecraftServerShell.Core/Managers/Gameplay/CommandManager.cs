@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinecraftServerShell.Core.Models.Gameplay
+namespace MinecraftServerShell.Core.Managers.Gameplay
 {
-    public class PlayerData
+    public class CommandManager
     {
-        // code later
+
     }
 }

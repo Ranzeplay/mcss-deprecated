@@ -10,7 +10,7 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay
     {
         public static event EventHandler<CommandExecutionEventArgs> CommandExecution = null!;
 
-        protected virtual void OnCommandExecution(CommandExecutionEventArgs e)
+        internal virtual void OnCommandExecution(CommandExecutionEventArgs e)
         {
             CommandExecution?.Invoke(this, e);
         }
