@@ -14,5 +14,7 @@ namespace MinecraftServerShell.Dashboard
         public static ConsoleOutputPage ConsoleOutputPage { get; set; } = new();
 
         public static LogPage LogPage { get; set; } = new();
+
+        public static string StatusbarText { get; set; } = "Loading...";
     }
 }

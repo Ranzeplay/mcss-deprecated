@@ -78,7 +78,7 @@ namespace MinecraftServerShell.Core.Managers
             var serverLogRegex = new Regex("^\\[\\d{2}:\\d{2}:\\d{2}\\] \\[([^\\]]*)\\/([^/]*)\\]: ([\\s\\S]+)");
             var serverLogMatch = serverLogRegex.Match(raw);
 
-            var logEntry = new ServerLog();
+            ServerLog logEntry;
             if (serverLogMatch.Success)
             {
                 logEntry = new ServerLog

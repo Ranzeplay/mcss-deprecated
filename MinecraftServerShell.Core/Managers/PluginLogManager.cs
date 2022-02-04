@@ -21,7 +21,7 @@ namespace MinecraftServerShell.Core.Managers
             InternalInstance.AppLog.PluginLog.Append(new Models.PluginLog
             {
                 Level = level,
-                Message = $"",
+                Message = message,
                 CreateTime = DateTime.Now,
                 PluginName = PluginName
             });

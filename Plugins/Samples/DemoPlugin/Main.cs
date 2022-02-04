@@ -8,7 +8,7 @@ namespace DemoPlugin
 {
     public class Main : IPluginEntry
     {
-        public static Main? Instance = null;
+        internal static Main Instance = null!;
 
         protected PluginLogManager LogManager = new(Resources.Name);
 

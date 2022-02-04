@@ -25,36 +25,52 @@ namespace MinecraftServerShell.Dashboard.Pages
     public partial class LogPage : Page
     {
         private readonly DataTable ServerLogDataTable = new();
+        private readonly DataTable PluginLogDataTable = new();
 
         public LogPage()
         {
             InitializeComponent();
 
-            var timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(2)
-            };
-            timer.Tick += (s, e) => { ServerLogTable.Items.Refresh(); };
-            timer.Start();
-
-            // Initialize server log
+            #region InitServerLog
             ServerLogDataTable.Columns.Add("Time");
-            ServerLogDataTable.Columns.Add("Level");
             ServerLogDataTable.Columns.Add("Issuer");
+            ServerLogDataTable.Columns.Add("Level");
             ServerLogDataTable.Columns.Add("Message");
 
-            ServerConsoleOutputEvent.ServerConsoleOutput += (s, e) =>
+            Core.InternalInstance.AppLog.ServerLog.NewLog += (s, e) =>
             {
-                var log = e.LogEntry;
+                var log = e;
+                // Display latest log to table
                 Dispatcher.Invoke(() =>
                 {
-                    ServerLogDataTable.Rows.Add(log.CreateTime.ToString("G"), log.LogLevel, log.Issuer, log.Message);
+                    ServerLogDataTable.Rows.Add(log.CreateTime.ToString("G"), log.Issuer, log.LogLevel, log.Message);
                     ServerLogTable.UpdateLayout();
-                    ServerLogTable.ScrollIntoView(ServerLogTable.Items[ServerLogTable.Items.Count - 1]);
+                    ServerLogTable.ScrollIntoView(ServerLogTable.Items[^1]);
                 });
             };
 
             ServerLogTable.ItemsSource = ServerLogDataTable.DefaultView;
+            #endregion
+
+            #region InitPluginLog
+            PluginLogDataTable.Columns.Add("Time");
+            PluginLogDataTable.Columns.Add("Plugin");
+            PluginLogDataTable.Columns.Add("Level");
+            PluginLogDataTable.Columns.Add("Message");
+
+            Core.InternalInstance.AppLog.PluginLog.NewLog += (s, e) =>
+            {
+                var log = e;
+                Dispatcher.Invoke(() =>
+                {
+                    PluginLogDataTable.Rows.Add(log.CreateTime.ToString("G"), log.Level.ToString("d"), log.PluginName, log.Message);
+                    PluginLogTable.UpdateLayout();
+                    PluginLogTable.ScrollIntoView(PluginLogTable.Items[^1]);
+                });
+            };
+
+            PluginLogTable.ItemsSource = PluginLogDataTable.DefaultView;
+            #endregion
         }
     }
 }

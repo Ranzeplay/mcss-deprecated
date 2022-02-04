@@ -26,7 +26,7 @@ namespace MinecraftServerShell.Core
             OtherLog = new(capacity);
         }
 
-        public LimitedLogList<Log> ServerLog { get; set; }
+        public LimitedLogList<ServerLog> ServerLog { get; set; }
 
         public LimitedLogList<PluginLog> PluginLog { get; set; }
 
