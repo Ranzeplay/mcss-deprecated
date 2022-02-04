@@ -63,7 +63,7 @@ namespace MinecraftServerShell.Dashboard.Pages
                 var log = e;
                 Dispatcher.Invoke(() =>
                 {
-                    PluginLogDataTable.Rows.Add(log.CreateTime.ToString("G"), log.Level.ToString("d"), log.PluginName, log.Message);
+                    PluginLogDataTable.Rows.Add(log.CreateTime.ToString("G"), log.PluginName, log.Level.ToString(), log.Message);
                     PluginLogTable.UpdateLayout();
                     PluginLogTable.ScrollIntoView(PluginLogTable.Items[^1]);
                 });
