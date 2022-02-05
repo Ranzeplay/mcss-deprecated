@@ -17,7 +17,7 @@ namespace MinecraftServerShell.Core.Managers
         private static readonly string ServerOutputPrefixRegex = "^\\[\\d{2}:\\d{2}:\\d{2}\\] \\[[^\\]]*\\/[^/]*\\]: ";
 
         private static readonly Regex PlayerLoginRegex = new(ServerOutputPrefixRegex + "([A-Za-z0-9_]{3,16})\\[\\/([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5})\\] logged in with entity id ([.0-9])+ at \\(([+-]?[0-9]+(?:\\.[0-9]*)?), ([+-]?[0-9]+(?:\\.[0-9]*)?), ([+-]?[0-9]+(?:\\.[0-9]*)?)\\)");
-        private static readonly Regex PlayerLostConnectionRegex = new(ServerOutputPrefixRegex + "([A-Za-z0-9_]{3,16}) lost connection: ([A-Za-z0-9_])+");
+        private static readonly Regex PlayerLostConnectionRegex = new(ServerOutputPrefixRegex + "([A-Za-z0-9_]{3,16}) lost connection: ([A-Za-z0-9_]*)");
         private static readonly Regex PlayerChatRegex = new(ServerOutputPrefixRegex + "\\<([A-Za-z0-9_]{3,16})\\> ([\\s\\S]*)");
 
         private static readonly string MCSSCommandPrefix = "!!";
