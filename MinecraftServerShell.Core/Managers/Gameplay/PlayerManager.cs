@@ -54,7 +54,7 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 ServerConsoleOutputEvent.ServerConsoleOutput += handler;
 
                 // Get location data
-                await ServerManager.SendMessageAsync($"data get entity {playerName} Pos");
+                ServerManager.SendMessageAsync($"data get entity {playerName} Pos");
 
                 while (!PendingPlayerData.ContainsKey(taskId)) { }
 
