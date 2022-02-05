@@ -3,6 +3,7 @@ using MinecraftServerShell.Core.Events.ServerEvents.Gameplay;
 using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
 using MinecraftServerShell.Core.Interfaces;
 using MinecraftServerShell.Core.Managers;
+using MinecraftServerShell.Core.Managers.Gameplay;
 using System.Text.Json;
 
 namespace DemoPlugin
@@ -26,11 +27,14 @@ namespace DemoPlugin
             CommandExecuteEvent.CommandExecution += CommandExecuteEvent_CommandExecution;
         }
 
-        private void CommandExecuteEvent_CommandExecution(object? sender, CommandExecutionEventArgs e)
+        private async void CommandExecuteEvent_CommandExecution(object? sender, CommandExecutionEventArgs e)
         {
             if (e.CommandName == "demo")
             {
                 LogManager.LogInfo($"{e.Issuer} has issued a command with arguments: {JsonSerializer.Serialize(e.CommandArgs)}");
+
+                var playerData = await PlayerManager.GetPlayerAsync(e.Issuer);
+                LogManager.LogInfo($"{playerData.Location.X}");
             }
         }
 

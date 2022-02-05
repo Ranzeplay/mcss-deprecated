@@ -39,16 +39,16 @@ namespace MinecraftServerShell.Core.Managers
             EventManager.SetupPlayerEvents();
         }
 
-        public static void SendMessage(string message)
+        public static async Task SendMessageAsync(string message)
         {
-            InternalInstance.ServerProcess.StandardInput.WriteLine(message);
+            await InternalInstance.ServerProcess.StandardInput.WriteLineAsync(message);
         }
 
         public static void StopServer()
         {
             if (!InternalInstance.ServerProcess.HasExited)
             {
-                SendMessage("stop");
+                SendMessageAsync("stop").Wait();
                 new ServerBeginStopEvent().OnServerBeginStop(new ServerStopEventArgs());
             }
         }

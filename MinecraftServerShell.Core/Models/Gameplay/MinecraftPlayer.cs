@@ -8,6 +8,8 @@ namespace MinecraftServerShell.Core.Models.Gameplay
 {
     public class MinecraftPlayer
     {
-        // code later
+        public string Name { get; set; } = null!;
+
+        public Location Location { get; set; } = null!;
     }
 }
