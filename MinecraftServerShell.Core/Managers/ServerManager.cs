@@ -38,7 +38,7 @@ namespace MinecraftServerShell.Core.Managers
             InternalInstance.ServerProcess.Start();
             InternalInstance.ServerProcess.Exited += ServerProcess_Exited;
 
-            EventManager.SetupPlayerEvents();
+            EventManager.SetupEvents();
         }
 
         public static void SendMessageAsync(string message)
@@ -52,13 +52,14 @@ namespace MinecraftServerShell.Core.Managers
             {
                 SendMessageAsync("stop");
                 new ServerBeginStopEvent().OnServerBeginStop(new ServerStopEventArgs());
-
             }
         }
 
         private static void ServerProcess_Exited(object? sender, EventArgs e)
         {
             new ServerStoppedEvent().OnServerStopped(new ServerStopEventArgs());
+
+            EventManager.ClearEvents();
         }
     }
 }

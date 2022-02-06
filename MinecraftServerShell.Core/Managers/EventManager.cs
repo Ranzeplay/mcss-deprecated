@@ -22,14 +22,32 @@ namespace MinecraftServerShell.Core.Managers
 
         private static readonly string MCSSCommandPrefix = "!!";
 
-        public static void SetupPlayerEvents()
+        internal static void SetupEvents()
         {
             InternalInstance.ServerProcess.OutputDataReceived += ServerProcess_OutputDataReceived;
 
+            SetupPlayerEvents();
+        }
+
+        private static void SetupPlayerEvents()
+        {
             ServerConsoleOutputEvent.ServerConsoleOutput += ServerConsoleOutputEvent_PlayerJoin;
             ServerConsoleOutputEvent.ServerConsoleOutput += ServerConsoleOutputEvent_PlayerDisconnect;
             ServerConsoleOutputEvent.ServerConsoleOutput += ServerConsoleOutputEvent_PlayerChat;
             PlayerChatEvent.PlayerChat += PlayerChatEvent_CommandExecution;
+        }
+
+        internal static void ClearEvents()
+        {
+            InternalInstance.ServerProcess.OutputDataReceived -= ServerProcess_OutputDataReceived;
+        }
+
+        private static void ClearPlayerEvents()
+        {
+            ServerConsoleOutputEvent.ServerConsoleOutput -= ServerConsoleOutputEvent_PlayerJoin;
+            ServerConsoleOutputEvent.ServerConsoleOutput -= ServerConsoleOutputEvent_PlayerDisconnect;
+            ServerConsoleOutputEvent.ServerConsoleOutput -= ServerConsoleOutputEvent_PlayerChat;
+            PlayerChatEvent.PlayerChat -= PlayerChatEvent_CommandExecution;
         }
 
         private static void ServerConsoleOutputEvent_PlayerChat(object? sender, ServerConsoleOutputEventArgs e)
