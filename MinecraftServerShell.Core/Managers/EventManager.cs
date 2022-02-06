@@ -89,12 +89,7 @@ namespace MinecraftServerShell.Core.Managers
                     PlayerName = match.Groups[1].Value,
                     NetworkAddress = match.Groups[2].Value,
                     EntityId = match.Groups[3].Value,
-                    Location = new()
-                    {
-                        X = double.Parse(match.Groups[3].Value),
-                        Y = double.Parse(match.Groups[4].Value),
-                        Z = double.Parse(match.Groups[5].Value)
-                    }
+                    Location = new(double.Parse(match.Groups[3].Value), double.Parse(match.Groups[4].Value), double.Parse(match.Groups[5].Value), string.Empty)
                 });
             }
         }

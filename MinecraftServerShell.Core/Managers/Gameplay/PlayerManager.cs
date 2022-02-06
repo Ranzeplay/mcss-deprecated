@@ -11,8 +11,6 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
 {
     public class PlayerManager
     {
-        private static readonly Dictionary<Guid, MinecraftPlayer> PendingPlayerData = new();
-
         private static readonly Regex EntityDataRegex = new("([A-Za-z0-9_]{3,16}) has the following entity data: ([\\s\\S]+)");
 
         private static readonly string DoubleDataRegexString = new("([+-]?[0-9]*[\\.,]?[0-9]+)?d");
@@ -21,10 +19,10 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
 
         public static async Task<MinecraftPlayer> GetPlayerAsync(string playerName)
         {
-            var res = await Task.Run(async () =>
+            var result = await Task.Run(() =>
             {
                 // Create player data pull task
-                var taskId = Guid.NewGuid();
+                MinecraftPlayer? playerData = null;
                 var handler = new EventHandler<ServerConsoleOutputEventArgs>((object? s, ServerConsoleOutputEventArgs e) =>
                 {
                     if (EntityDataRegex.IsMatch(e.LogEntry.Message))
@@ -37,15 +35,10 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                         {
                             var loc = LocationDataRegex.Match(entityData);
 
-                            PendingPlayerData[taskId] = new()
+                            playerData = new()
                             {
                                 Name = playerName,
-                                Location = new()
-                                {
-                                    X = double.Parse(loc.Groups[2].Value),
-                                    Y = double.Parse(loc.Groups[3].Value),
-                                    Z = double.Parse(loc.Groups[4].Value)
-                                }
+                                Location = new(double.Parse(loc.Groups[2].Value), double.Parse(loc.Groups[3].Value), double.Parse(loc.Groups[4].Value), string.Empty)
                             };
                         }
                     }
@@ -56,19 +49,15 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 // Get location data
                 ServerManager.SendMessageAsync($"data get entity {playerName} Pos");
 
-                while (!PendingPlayerData.ContainsKey(taskId)) { }
+                while (playerData == null) { }
 
                 // Unsubscribe event (this is a one-time event)
                 ServerConsoleOutputEvent.ServerConsoleOutput -= handler;
 
-                var result = PendingPlayerData[taskId];
-
-                // Remove it, this data is a snapshot
-                PendingPlayerData.Remove(taskId);
-                return result;
+                return playerData;
             });
 
-            return res;
+            return result;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace DemoPlugin
                 LogManager.LogInfo($"{e.Issuer} has issued a command with arguments: {JsonSerializer.Serialize(e.CommandArgs)}");
 
                 var playerData = await PlayerManager.GetPlayerAsync(e.Issuer);
-                LogManager.LogInfo($"{playerData.Location.X}");
+                LogManager.LogInfo($"{playerData.Location.Coordinate.X}");
             }
         }
 
