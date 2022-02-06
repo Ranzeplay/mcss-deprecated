@@ -33,6 +33,7 @@ namespace MinecraftServerShell.Dashboard.Pages
             PluginDirectoryTextBox.Text = appSettings.PluginDirectory;
             ServerDirectoryTextBox.Text = appSettings.ServerDirectory;
             StartupCommandTextBox.Text = appSettings.StartupCommand;
+            MaxLoggingEntryTextBox.Text = appSettings.MaxLogLength.ToString();
         }
 
         private void ServerDirectorySelectionButton_Click(object sender, RoutedEventArgs e)
@@ -63,16 +64,31 @@ namespace MinecraftServerShell.Dashboard.Pages
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            AppSettingsManager.SaveNewSettings(appSettings);
-
-            var dialog = new TaskDialog
+            if (long.TryParse(MaxLoggingEntryTextBox.Text, out _))
             {
-                WindowTitle = Application.Current.MainWindow.Name,
-                MainInstruction = "Success!",
-                Content = "App settings saved successfully!"
-            };
-            dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
-            dialog.ShowDialog();
+                AppSettingsManager.SaveNewSettings(appSettings);
+
+                var dialog = new TaskDialog
+                {
+                    WindowTitle = Application.Current.MainWindow.Name,
+                    MainInstruction = "Success!",
+                    Content = "App settings saved successfully!"
+                };
+                dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
+                dialog.ShowDialog();
+            }
+            else
+            {
+                var dialog = new TaskDialog
+                {
+                    WindowTitle = Application.Current.MainWindow.Name,
+                    MainInstruction = "Failed!",
+                    Content = "Only number is accepted by \"Max logging entries\"",
+                    MainIcon = TaskDialogIcon.Error
+                };
+                dialog.Buttons.Add(new TaskDialogButton(ButtonType.Ok));
+                dialog.ShowDialog();
+            }
         }
     }
 }

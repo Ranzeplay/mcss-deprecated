@@ -33,6 +33,12 @@
                     <TextBox Name="PluginDirectoryTextBox"></TextBox>
                 </DockPanel>
             </StackPanel>
+            <StackPanel Margin="4">
+                <TextBlock>Max logging entries</TextBlock>
+                <DockPanel>
+                    <TextBox Name="MaxLoggingEntryTextBox"></TextBox>
+                </DockPanel>
+            </StackPanel>
             <StackPanel Margin="0, 12, 0, 0">
                 <Button Name="SaveButton" Click="SaveButton_Click">Save settings</Button>
             </StackPanel>
