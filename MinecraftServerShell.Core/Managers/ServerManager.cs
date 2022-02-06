@@ -1,4 +1,6 @@
-﻿using MinecraftServerShell.Core.Events.ServerEvents;
+﻿using MinecraftServerShell.Core.Events.CoreEvents;
+using MinecraftServerShell.Core.Events.ServerEvents;
+using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -50,6 +52,7 @@ namespace MinecraftServerShell.Core.Managers
             {
                 SendMessageAsync("stop");
                 new ServerBeginStopEvent().OnServerBeginStop(new ServerStopEventArgs());
+
             }
         }
 

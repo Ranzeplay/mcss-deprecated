@@ -16,16 +16,69 @@ namespace MinecraftServerShell.Core.Managers
     {
         private static readonly string ServerOutputPrefixRegex = "^\\[\\d{2}:\\d{2}:\\d{2}\\] \\[[^\\]]*\\/[^/]*\\]: ";
 
-        private static readonly Regex PlayerLoginRegex = new(ServerOutputPrefixRegex + "([A-Za-z0-9_]{3,16})\\[\\/([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5})\\] logged in with entity id ([.0-9])+ at \\(([+-]?[0-9]+(?:\\.[0-9]*)?), ([+-]?[0-9]+(?:\\.[0-9]*)?), ([+-]?[0-9]+(?:\\.[0-9]*)?)\\)");
-        private static readonly Regex PlayerLostConnectionRegex = new(ServerOutputPrefixRegex + "([A-Za-z0-9_]{3,16}) lost connection: ([A-Za-z0-9_]*)");
-        private static readonly Regex PlayerChatRegex = new(ServerOutputPrefixRegex + "\\<([A-Za-z0-9_]{3,16})\\> ([\\s\\S]*)");
+        private static readonly Regex PlayerLoginRegex = new("([A-Za-z0-9_]{3,16})\\[\\/([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5})\\] logged in with entity id ([.0-9])+ at \\(([+-]?[0-9]+(?:\\.[0-9]*)?), ([+-]?[0-9]+(?:\\.[0-9]*)?), ([+-]?[0-9]+(?:\\.[0-9]*)?)\\)");
+        private static readonly Regex PlayerLostConnectionRegex = new("([A-Za-z0-9_]{3,16}) lost connection: ([A-Za-z0-9_]*)");
+        private static readonly Regex PlayerChatRegex = new("\\<([A-Za-z0-9_]{3,16})\\> ([\\s\\S]*)");
 
         private static readonly string MCSSCommandPrefix = "!!";
 
         public static void SetupPlayerEvents()
         {
             InternalInstance.ServerProcess.OutputDataReceived += ServerProcess_OutputDataReceived;
+
+            ServerConsoleOutputEvent.ServerConsoleOutput += ServerConsoleOutputEvent_PlayerJoin;
+            ServerConsoleOutputEvent.ServerConsoleOutput += ServerConsoleOutputEvent_PlayerDisconnect;
+            ServerConsoleOutputEvent.ServerConsoleOutput += ServerConsoleOutputEvent_PlayerChat;
             PlayerChatEvent.PlayerChat += PlayerChatEvent_CommandExecution;
+        }
+
+        private static void ServerConsoleOutputEvent_PlayerChat(object? sender, ServerConsoleOutputEventArgs e)
+        {
+            if (PlayerChatRegex.IsMatch(e.LogEntry.Message))
+            {
+                var match = PlayerChatRegex.Match(e.LogEntry.Message);
+
+                new PlayerChatEvent().OnPlayerChat(new PlayerChatEventArgs
+                {
+                    PlayerName = match.Groups[1].Value,
+                    ChatMessage = match.Groups[2].Value,
+                });
+            }
+        }
+
+        private static void ServerConsoleOutputEvent_PlayerDisconnect(object? sender, ServerConsoleOutputEventArgs e)
+        {
+            if (PlayerLostConnectionRegex.IsMatch(e.LogEntry.Message))
+            {
+                var match = PlayerLostConnectionRegex.Match(e.LogEntry.Message);
+
+                new PlayerDisconnectEvent().OnPlayerLeave(new PlayerLeaveEventArgs
+                {
+                    PlayerName = match.Groups[1].Value,
+                    Reason = match.Groups[2].Value,
+                });
+            }
+        }
+
+        private static void ServerConsoleOutputEvent_PlayerJoin(object? sender, ServerConsoleOutputEventArgs e)
+        {
+            if (PlayerLoginRegex.IsMatch(e.LogEntry.Message))
+            {
+                var match = PlayerLoginRegex.Match(e.LogEntry.Message);
+
+                new PlayerJoinEvent().OnPlayerJoin(new PlayerJoinEventArgs
+                {
+                    PlayerName = match.Groups[1].Value,
+                    NetworkAddress = match.Groups[2].Value,
+                    EntityId = match.Groups[3].Value,
+                    Location = new()
+                    {
+                        X = double.Parse(match.Groups[3].Value),
+                        Y = double.Parse(match.Groups[4].Value),
+                        Z = double.Parse(match.Groups[5].Value)
+                    }
+                });
+            }
         }
 
         private static void PlayerChatEvent_CommandExecution(object? sender, PlayerChatEventArgs e)
@@ -47,85 +100,41 @@ namespace MinecraftServerShell.Core.Managers
 
         private static void ServerProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            var data = e.Data;
-
-            if (data != null)
+            if (e.Data != null)
             {
-                if (PlayerLoginRegex.IsMatch(data))
-                {
-                    var match = PlayerLoginRegex.Match(data);
+                var serverLogRegex = new Regex("^\\[\\d{2}:\\d{2}:\\d{2}\\] \\[([^\\]]*)\\/([^/]*)\\]: ([\\s\\S]+)");
+                var serverLogMatch = serverLogRegex.Match(e.Data);
 
-                    new PlayerJoinEvent().OnPlayerJoin(new PlayerJoinEventArgs
+                ServerLog logEntry;
+                if (serverLogMatch.Success)
+                {
+                    logEntry = new ServerLog
                     {
-                        PlayerName = match.Groups[1].Value,
-                        NetworkAddress = match.Groups[2].Value,
-                        EntityId = match.Groups[3].Value,
-                        Location = new()
-                        {
-                            X = double.Parse(match.Groups[3].Value),
-                            Y = double.Parse(match.Groups[4].Value),
-                            Z = double.Parse(match.Groups[5].Value)
-                        }
-                    });
+                        CreateTime = DateTime.Now,
+                        Issuer = serverLogMatch.Groups[1].Value,
+                        LogLevel = serverLogMatch.Groups[2].Value,
+                        Message = serverLogMatch.Groups[3].Value,
+                    };
                 }
-                else if (PlayerLostConnectionRegex.IsMatch(data))
+                else
                 {
-                    var match = PlayerLostConnectionRegex.Match(data);
-
-                    new PlayerDisconnectEvent().OnPlayerLeave(new PlayerLeaveEventArgs
+                    logEntry = new ServerLog
                     {
-                        PlayerName = match.Groups[1].Value,
-                        Reason = match.Groups[2].Value,
-                    });
-                }
-                else if (PlayerChatRegex.IsMatch(data))
-                {
-                    var match = PlayerChatRegex.Match(data);
-
-                    new PlayerChatEvent().OnPlayerChat(new PlayerChatEventArgs
-                    {
-                        PlayerName = match.Groups[1].Value,
-                        ChatMessage = match.Groups[2].Value,
-                    });
+                        CreateTime = DateTime.Now,
+                        Issuer = "-",
+                        LogLevel = "-",
+                        Message = e.Data,
+                    };
                 }
 
-                // Anyway, we need to broadcast ServerConsoleOutput
-                IssueServerOutputEvent(data);
-            }
-        }
-
-        private static void IssueServerOutputEvent(string raw)
-        {
-            var serverLogRegex = new Regex("^\\[\\d{2}:\\d{2}:\\d{2}\\] \\[([^\\]]*)\\/([^/]*)\\]: ([\\s\\S]+)");
-            var serverLogMatch = serverLogRegex.Match(raw);
-
-            ServerLog logEntry;
-            if (serverLogMatch.Success)
-            {
-                logEntry = new ServerLog
+                if (logEntry != null)
                 {
-                    CreateTime = DateTime.Now,
-                    Issuer = serverLogMatch.Groups[1].Value,
-                    LogLevel = serverLogMatch.Groups[2].Value,
-                    Message = serverLogMatch.Groups[3].Value,
-                };
+                    // Add it into log list
+                    InternalInstance.AppLog.ServerLog.Append(logEntry);
+
+                    new ServerConsoleOutputEvent().OnServerConsoleOutput(new ServerConsoleOutputEventArgs { LogEntry = logEntry });
+                }
             }
-            else
-            {
-                logEntry = new ServerLog
-                {
-                    CreateTime = DateTime.Now,
-                    Issuer = "-",
-                    LogLevel = "-",
-                    Message = raw,
-                };
-            }
-
-
-            // Add it into log list
-            InternalInstance.AppLog.ServerLog.Append(logEntry);
-
-            new ServerConsoleOutputEvent().OnServerConsoleOutput(new ServerConsoleOutputEventArgs { LogEntry = logEntry });
         }
     }
 }
