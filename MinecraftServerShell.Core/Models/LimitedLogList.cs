@@ -22,14 +22,17 @@ namespace MinecraftServerShell.Core.Models
 
         public void Append(T element)
         {
-            Elements.AddLast(element);
-
-            if(Elements.Count > Capacity)
+            if (Elements != null)
             {
-                Elements.RemoveLast();
-            }
+                Elements.AddLast(element);
 
-            NewLog?.Invoke(this, element);
+                if (Elements.Count > Capacity)
+                {
+                    Elements.RemoveLast();
+                }
+
+                NewLog?.Invoke(this, element);
+            }
         }
     }
 }

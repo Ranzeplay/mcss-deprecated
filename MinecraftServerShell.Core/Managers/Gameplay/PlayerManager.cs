@@ -1,4 +1,5 @@
 ﻿using MinecraftServerShell.Core.Events.CoreEvents;
+using MinecraftServerShell.Core.Models;
 using MinecraftServerShell.Core.Models.Gameplay;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,26 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
 
         private static readonly string DoubleDataRegexString = new("([+-]?[0-9]*[\\.,]?[0-9]+)?d");
 
-        private static readonly Regex LocationDataRegex = new($"^\\[({DoubleDataRegexString}, {DoubleDataRegexString}, {DoubleDataRegexString})\\]");
+        private static readonly Regex CoordinateDataRegex = new($"^\\[({DoubleDataRegexString}, {DoubleDataRegexString}, {DoubleDataRegexString})\\]");
 
         public static async Task<MinecraftPlayer> GetPlayerAsync(string playerName)
         {
-            var result = await Task.Run(() =>
+            var coordinate = await GetPlayerCoordinateAsync(playerName);
+            var dimension = await GetPlayerDimensionAsync(playerName);
+
+            return new MinecraftPlayer
+            {
+                Name = playerName,
+                Location = new Location(coordinate, dimension)
+            };
+        }
+
+        public static async Task<Coordinate> GetPlayerCoordinateAsync(string playerName)
+        {
+            return await Task.Run(() =>
             {
                 // Create player data pull task
-                MinecraftPlayer? playerData = null;
+                Coordinate? coordinate = null;
                 var handler = new EventHandler<ServerConsoleOutputEventArgs>((object? s, ServerConsoleOutputEventArgs e) =>
                 {
                     if (EntityDataRegex.IsMatch(e.LogEntry.Message))
@@ -31,14 +44,15 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                         var entityData = EntityDataRegex.Match(e.LogEntry.Message).Groups[2].Value;
 
                         // We also need to compare player name with it
-                        if (LocationDataRegex.IsMatch(entityData) && EntityDataRegex.Match(e.LogEntry.Message).Groups[1].Value == playerName)
+                        if (CoordinateDataRegex.IsMatch(entityData) && EntityDataRegex.Match(e.LogEntry.Message).Groups[1].Value == playerName)
                         {
-                            var loc = LocationDataRegex.Match(entityData);
+                            var loc = CoordinateDataRegex.Match(entityData);
 
-                            playerData = new()
+                            coordinate = new Coordinate
                             {
-                                Name = playerName,
-                                Location = new(double.Parse(loc.Groups[2].Value), double.Parse(loc.Groups[3].Value), double.Parse(loc.Groups[4].Value), string.Empty)
+                                X = double.Parse(loc.Groups[2].Value),
+                                Y = double.Parse(loc.Groups[3].Value),
+                                Z = double.Parse(loc.Groups[4].Value)
                             };
                         }
                     }
@@ -49,15 +63,47 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 // Get location data
                 ServerManager.SendMessageAsync($"data get entity {playerName} Pos");
 
-                while (playerData == null) { }
+                while (coordinate == null) { }
 
                 // Unsubscribe event (this is a one-time event)
                 ServerConsoleOutputEvent.ServerConsoleOutput -= handler;
 
-                return playerData;
+                return coordinate;
             });
+        }
 
-            return result;
+        public static async Task<Dimension> GetPlayerDimensionAsync(string playerName)
+        {
+            return await Task.Run(() =>
+            {
+                var dimension = Dimension.Invalid;
+                var handler = new EventHandler<ServerConsoleOutputEventArgs>((object? s, ServerConsoleOutputEventArgs e) =>
+                {
+                    if (EntityDataRegex.IsMatch(e.LogEntry.Message))
+                    {
+                        // If this matches the Pos data we want
+                        var entityData = EntityDataRegex.Match(e.LogEntry.Message).Groups[2].Value;
+
+                        // Match player name
+                        if (EntityDataRegex.Match(e.LogEntry.Message).Groups[1].Value == playerName)
+                        {
+                            dimension = entityData.Trim('\"').ParseDimension();
+                        }
+                    }
+                });
+
+                ServerConsoleOutputEvent.ServerConsoleOutput += handler;
+
+                // Get location data
+                ServerManager.SendMessageAsync($"data get entity {playerName} Dimension");
+
+                while (dimension == Dimension.Invalid) { }
+
+                // Unsubscribe event (this is a one-time event)
+                ServerConsoleOutputEvent.ServerConsoleOutput -= handler;
+
+                return dimension;
+            });
         }
     }
 }

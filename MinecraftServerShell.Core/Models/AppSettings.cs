@@ -14,6 +14,6 @@ namespace MinecraftServerShell.Core.Models
 
         public string PluginDirectory { get; set; }
 
-        public long MaxLogLength { get; set; }
+        public long MaxLogLength { get; set; } = 1000;
     }
 }

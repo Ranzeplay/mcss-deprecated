@@ -4,6 +4,7 @@ using MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player;
 using MinecraftServerShell.Core.Interfaces;
 using MinecraftServerShell.Core.Managers;
 using MinecraftServerShell.Core.Managers.Gameplay;
+using MinecraftServerShell.Core.Models;
 using System.Text.Json;
 
 namespace DemoPlugin
@@ -35,6 +36,7 @@ namespace DemoPlugin
 
                 var playerData = await PlayerManager.GetPlayerAsync(e.Issuer);
                 LogManager.LogInfo($"{playerData.Location.Coordinate.X}");
+                LogManager.LogInfo($"{Enum.GetName(typeof(Dimension), playerData.Location.Dimension)}");
             }
         }
 

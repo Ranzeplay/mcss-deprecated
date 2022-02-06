@@ -17,22 +17,13 @@ namespace MinecraftServerShell.Core.Models
                 Z = z
             };
 
-            if (dimensionId == "minecraft:overworld")
-            {
-                Dimension = Dimension.Overworld;
-            }
-            else if (dimensionId == "minecraft:the_nether")
-            {
-                Dimension = Dimension.TheNether;
-            }
-            else if (dimensionId == "minecraft:the_end")
-            {
-                Dimension = Dimension.TheEnd;
-            }
-            else
-            {
-                Dimension = Dimension.Invalid;
-            }
+            Dimension = dimensionId.ParseDimension();
+        }
+
+        public Location(Coordinate coordinate, Dimension dimension)
+        {
+            Coordinate = coordinate;
+            Dimension = dimension;
         }
 
         public Coordinate Coordinate { get; set; }
@@ -55,5 +46,28 @@ namespace MinecraftServerShell.Core.Models
         TheNether,
         TheEnd,
         Invalid
+    }
+
+    public static class DimensionExtension
+    {
+        public static Dimension ParseDimension(this string dimensionId)
+        {
+            if (dimensionId == "minecraft:overworld")
+            {
+                return Dimension.Overworld;
+            }
+            else if (dimensionId == "minecraft:the_nether")
+            {
+                return Dimension.TheNether;
+            }
+            else if (dimensionId == "minecraft:the_end")
+            {
+                return Dimension.TheEnd;
+            }
+            else
+            {
+                return Dimension.Invalid;
+            }
+        }
     }
 }
