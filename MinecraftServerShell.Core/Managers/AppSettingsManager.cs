@@ -31,7 +31,7 @@ namespace MinecraftServerShell.Core.Managers
             File.WriteAllText(path, JsonSerializer.Serialize(settings));
         }
 
-        public static AppSettings? ReadOrCreateSettings()
+        public static AppSettings ReadOrCreateSettings()
         {
             CreateDefaultIfNotExist();
 

@@ -23,7 +23,7 @@ namespace MinecraftServerShell.Dashboard.Pages
     /// </summary>
     public partial class ApplicationSettingsPage : Page
     {
-        private AppSettings appSettings;
+        private readonly AppSettings appSettings;
 
         public ApplicationSettingsPage()
         {

@@ -14,7 +14,7 @@ namespace MinecraftServerShell.Core
 
         public static List<PluginRegistry> PluginsEnabled { get; set; } = new();
 
-        public static ApplicationLog AppLog { get; set; }
+        public static ApplicationLog AppLog { get; set; } = null!;
     }
 
     public class ApplicationLog
