@@ -14,10 +14,13 @@ namespace MinecraftServerShell.Core.Models.Gameplay
 
         public Location Location { get; set; } = null!;
 
+        public float Health { get; set; } = -1;
+
         public async Task Renew()
         {
             var newData = await PlayerManager.GetPlayerAsync(Name);
             Location = newData.Location;
+            Health = newData.Health;
         }
     }
 }

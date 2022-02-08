@@ -35,8 +35,9 @@ namespace DemoPlugin
                 LogManager.LogInfo($"{e.Issuer} has issued a command with arguments: {JsonSerializer.Serialize(e.CommandArgs)}");
 
                 var playerData = await PlayerManager.GetPlayerAsync(e.Issuer);
-                LogManager.LogInfo($"{playerData.Location.Coordinate.X}");
-                LogManager.LogInfo($"{Enum.GetName(typeof(Dimension), playerData.Location.Dimension)}");
+                LogManager.LogInfo($"X coordinate: {playerData.Location.Coordinate.X}");
+                LogManager.LogInfo($"Dimension: {Enum.GetName(typeof(Dimension), playerData.Location.Dimension)}");
+                LogManager.LogInfo($"Health: {playerData.Health}");
             }
         }
 

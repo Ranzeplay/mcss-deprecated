@@ -15,20 +15,17 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
         private static readonly Regex EntityDataRegex = new("([A-Za-z0-9_]{3,16}) has the following entity data: ([\\s\\S]+)");
 
         private static readonly string DoubleDataRegexString = new("([+-]?[0-9]*[\\.,]?[0-9]+)?d");
+        private static readonly Regex FloatDataRegex = new("([+-]?[0-9]*[\\.,]?[0-9]+)f");
 
         private static readonly Regex CoordinateDataRegex = new($"^\\[({DoubleDataRegexString}, {DoubleDataRegexString}, {DoubleDataRegexString})\\]");
 
-        public static async Task<MinecraftPlayer> GetPlayerAsync(string playerName)
+        public static async Task<MinecraftPlayer> GetPlayerAsync(string playerName) => new MinecraftPlayer
         {
-            var coordinate = await GetPlayerCoordinateAsync(playerName);
-            var dimension = await GetPlayerDimensionAsync(playerName);
-
-            return new MinecraftPlayer
-            {
-                Name = playerName,
-                Location = new Location(coordinate, dimension)
-            };
-        }
+            Name = playerName,
+            Location = new Location(await GetPlayerCoordinateAsync(playerName),
+                                    await GetPlayerDimensionAsync(playerName)),
+            Health = await GetPlayerHealthAsync(playerName),
+        };
 
         public static async Task<Coordinate> GetPlayerCoordinateAsync(string playerName)
         {
@@ -81,7 +78,7 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 {
                     if (EntityDataRegex.IsMatch(e.LogEntry.Message))
                     {
-                        // If this matches the Pos data we want
+                        // If this matches the Dimension data we want
                         var entityData = EntityDataRegex.Match(e.LogEntry.Message).Groups[2].Value;
 
                         // Match player name
@@ -103,6 +100,43 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 ServerConsoleOutputEvent.ServerConsoleOutput -= handler;
 
                 return dimension;
+            });
+        }
+
+        public static async Task<float> GetPlayerHealthAsync(string playerName)
+        {
+            return await Task.Run(() =>
+            {
+                // Create player data pull task
+                float health = -1;
+                var handler = new EventHandler<ServerConsoleOutputEventArgs>((object? s, ServerConsoleOutputEventArgs e) =>
+                {
+                    if (EntityDataRegex.IsMatch(e.LogEntry.Message))
+                    {
+                        // If this matches the Health data we want
+                        var entityData = EntityDataRegex.Match(e.LogEntry.Message).Groups[2].Value;
+
+                        // We also need to compare player name with it
+                        if (FloatDataRegex.IsMatch(entityData) && EntityDataRegex.Match(e.LogEntry.Message).Groups[1].Value == playerName)
+                        {
+                            var match = FloatDataRegex.Match(entityData);
+
+                            health = float.Parse(match.Groups[1].Value);
+                        }
+                    }
+                });
+
+                ServerConsoleOutputEvent.ServerConsoleOutput += handler;
+
+                // Get location data
+                ServerManager.SendMessage($"data get entity {playerName} Health");
+
+                while (health == -1) { }
+
+                // Unsubscribe event (this is a one-time event)
+                ServerConsoleOutputEvent.ServerConsoleOutput -= handler;
+
+                return health;
             });
         }
     }
