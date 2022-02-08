@@ -41,16 +41,18 @@ namespace MinecraftServerShell.Core.Managers
             EventManager.SetupEvents();
         }
 
-        public static void SendMessage(string message)
+        public static void SendConsoleMessage(string message)
         {
             InternalInstance.ServerProcess.StandardInput.WriteLine(message);
         }
+
+        public static void Send
 
         public static void StopServer()
         {
             if (!InternalInstance.ServerProcess.HasExited)
             {
-                SendMessage("stop");
+                SendConsoleMessage("stop");
                 new ServerBeginStopEvent().OnServerBeginStop(new ServerStopEventArgs());
             }
         }
