@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoPlugin", "Plugins\Sampl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinecraftServerShell.Core", "MinecraftServerShell.Core\MinecraftServerShell.Core.csproj", "{C84D34CA-7E5A-485E-95A2-1940DD80D963}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{369EBDBC-3E52-45FA-A391-199AB7FA5E7E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCSS.BackupPlugin", "Plugins\Product\MCSS.BackupPlugin\MCSS.BackupPlugin.csproj", "{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,10 @@ Global
 		{C84D34CA-7E5A-485E-95A2-1940DD80D963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C84D34CA-7E5A-485E-95A2-1940DD80D963}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C84D34CA-7E5A-485E-95A2-1940DD80D963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +46,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5C1DC2EE-BE65-4772-BB09-7C3E09DF623C} = {A407CCF8-E358-46A0-BCC9-335A6F920F28}
 		{16CBA29A-1391-4743-B82D-37108EB48221} = {5C1DC2EE-BE65-4772-BB09-7C3E09DF623C}
+		{369EBDBC-3E52-45FA-A391-199AB7FA5E7E} = {A407CCF8-E358-46A0-BCC9-335A6F920F28}
+		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E} = {369EBDBC-3E52-45FA-A391-199AB7FA5E7E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44DF7D58-11CC-4DF9-925D-AAC64C536436}
