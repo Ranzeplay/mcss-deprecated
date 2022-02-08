@@ -38,6 +38,7 @@ namespace DemoPlugin
                 LogManager.LogInfo($"X coordinate: {playerData.Location.Coordinate.X}");
                 LogManager.LogInfo($"Dimension: {Enum.GetName(typeof(Dimension), playerData.Location.Dimension)}");
                 LogManager.LogInfo($"Health: {playerData.Health}");
+                LogManager.LogInfo($"Food level: {playerData.FoodLevel}");
             }
         }
 

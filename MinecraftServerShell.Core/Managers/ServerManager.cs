@@ -46,8 +46,6 @@ namespace MinecraftServerShell.Core.Managers
             InternalInstance.ServerProcess.StandardInput.WriteLine(message);
         }
 
-        public static void Send
-
         public static void StopServer()
         {
             if (!InternalInstance.ServerProcess.HasExited)

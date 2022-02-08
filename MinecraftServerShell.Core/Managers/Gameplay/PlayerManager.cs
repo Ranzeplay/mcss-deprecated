@@ -25,6 +25,7 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
             Location = new Location(await GetPlayerCoordinateAsync(playerName),
                                     await GetPlayerDimensionAsync(playerName)),
             Health = await GetPlayerHealthAsync(playerName),
+            FoodLevel = await GetPlayerFoodLevelAsync(playerName)
         };
 
         public static async Task<Coordinate> GetPlayerCoordinateAsync(string playerName)
@@ -137,6 +138,41 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 ServerConsoleOutputEvent.ServerConsoleOutput -= handler;
 
                 return health;
+            });
+        }
+
+        public static async Task<int> GetPlayerFoodLevelAsync(string playerName)
+        {
+            return await Task.Run(() =>
+            {
+                // Create player data pull task
+                int foodLevel = -1;
+                var handler = new EventHandler<ServerConsoleOutputEventArgs>((object? s, ServerConsoleOutputEventArgs e) =>
+                {
+                    if (EntityDataRegex.IsMatch(e.LogEntry.Message))
+                    {
+                        // If this matches the FoodLevel data we want
+                        var entityData = EntityDataRegex.Match(e.LogEntry.Message).Groups[2].Value;
+
+                        // We also need to compare player name with it
+                        if (int.TryParse(entityData, out _) && EntityDataRegex.Match(e.LogEntry.Message).Groups[1].Value == playerName)
+                        {
+                            foodLevel = int.Parse(entityData);
+                        }
+                    }
+                });
+
+                ServerConsoleOutputEvent.ServerConsoleOutput += handler;
+
+                // Get location data
+                ServerManager.SendConsoleMessage($"data get entity {playerName} foodLevel");
+
+                while (foodLevel == -1) { }
+
+                // Unsubscribe event (this is a one-time event)
+                ServerConsoleOutputEvent.ServerConsoleOutput -= handler;
+
+                return foodLevel;
             });
         }
     }
