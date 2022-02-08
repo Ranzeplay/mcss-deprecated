@@ -41,7 +41,7 @@ namespace MinecraftServerShell.Core.Managers
             EventManager.SetupEvents();
         }
 
-        public static void SendMessageAsync(string message)
+        public static void SendMessage(string message)
         {
             InternalInstance.ServerProcess.StandardInput.WriteLine(message);
         }
@@ -50,7 +50,7 @@ namespace MinecraftServerShell.Core.Managers
         {
             if (!InternalInstance.ServerProcess.HasExited)
             {
-                SendMessageAsync("stop");
+                SendMessage("stop");
                 new ServerBeginStopEvent().OnServerBeginStop(new ServerStopEventArgs());
             }
         }

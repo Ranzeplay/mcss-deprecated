@@ -85,7 +85,7 @@ namespace MinecraftServerShell.Dashboard.Pages
 
         private void SendMessageToServer()
         {
-            ServerManager.SendMessageAsync(CommandTextBox.Text);
+            ServerManager.SendMessage(CommandTextBox.Text);
             ServerOutputTextBlock.Text += $"$> {CommandTextBox.Text}\n";
             CommandTextBox.Clear();
         }

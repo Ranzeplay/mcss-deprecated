@@ -61,7 +61,7 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 ServerConsoleOutputEvent.ServerConsoleOutput += handler;
 
                 // Get location data
-                ServerManager.SendMessageAsync($"data get entity {playerName} Pos");
+                ServerManager.SendMessage($"data get entity {playerName} Pos");
 
                 while (coordinate == null) { }
 
@@ -95,7 +95,7 @@ namespace MinecraftServerShell.Core.Managers.Gameplay
                 ServerConsoleOutputEvent.ServerConsoleOutput += handler;
 
                 // Get location data
-                ServerManager.SendMessageAsync($"data get entity {playerName} Dimension");
+                ServerManager.SendMessage($"data get entity {playerName} Dimension");
 
                 while (dimension == Dimension.Invalid) { }
 
