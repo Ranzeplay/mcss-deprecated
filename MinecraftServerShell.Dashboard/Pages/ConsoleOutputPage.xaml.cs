@@ -89,5 +89,20 @@ namespace MinecraftServerShell.Dashboard.Pages
             ServerOutputTextBlock.Text += $"$> {CommandTextBox.Text}\n";
             CommandTextBox.Clear();
         }
+
+        private void ClearOutputButton_Click(object sender, RoutedEventArgs e)
+        {
+            ServerOutputTextBlock.Text = string.Empty;
+        }
+
+        private void KillServerButton_Click(object sender, RoutedEventArgs e)
+        {
+            Core.InternalInstance.ServerProcess.Kill();
+
+            Dispatcher.Invoke(() =>
+            {
+                ServerOutputTextBlock.Text += $"[Killing server process]\n";
+            });
+        }
     }
 }

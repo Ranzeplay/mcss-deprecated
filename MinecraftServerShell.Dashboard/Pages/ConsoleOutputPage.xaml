@@ -14,6 +14,12 @@
                 <Button Name="StartServerButton" Click="StartServerButton_Click">Start</Button>
                 <Button Name="StopServerButton" Click="StopServerButton_Click">Stop</Button>
                 <Button Name="RestartServerButton">Restart</Button>
+                <Menu Margin="16, 0, 0, 0">
+                    <MenuItem Header="Other actions">
+                        <MenuItem Header="Clear output" Name="ClearOutputButton" Click="ClearOutputButton_Click"/>
+                        <MenuItem Header="Kill server" Name="KillServerButton" Click="KillServerButton_Click"/>
+                    </MenuItem>
+                </Menu>
             </ToolBar>
         </ToolBarTray>
         <DockPanel DockPanel.Dock="Bottom">
