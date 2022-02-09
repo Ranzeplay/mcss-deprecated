@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Properties\MCSS_Icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
   </ItemGroup>
 
@@ -17,6 +21,12 @@
 
   <ItemGroup>
     <Folder Include="Managers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Properties\MCSS_Icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
