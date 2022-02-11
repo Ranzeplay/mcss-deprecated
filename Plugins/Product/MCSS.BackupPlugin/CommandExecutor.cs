@@ -16,7 +16,7 @@ namespace MCSS.BackupPlugin
                 switch (e.CommandArgs[0].ToLower())
                 {
                     case "make":
-                        await BackupManager.CreateBackup("New backup");
+                        await BackupManager.CreateBackup(e.CommandArgs[1], e.Issuer);
                         break;
                     case "rollback":
                         break;

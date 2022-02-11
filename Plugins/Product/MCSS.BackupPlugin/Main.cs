@@ -10,6 +10,7 @@ namespace MCSS.BackupPlugin
         internal static Main Instance = null!;
 
         internal PluginLogManager LogManager = new(Resources.Name);
+        internal bool IsIdle = true;
 
         public void OnPluginLoad()
         {

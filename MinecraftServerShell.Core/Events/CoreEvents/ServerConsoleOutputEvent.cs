@@ -19,6 +19,6 @@ namespace MinecraftServerShell.Core.Events.CoreEvents
 
     public class ServerConsoleOutputEventArgs : EventArgs
     {
-        public ServerLog LogEntry { get; set; }
+        public ServerLog LogEntry { get; set; } = null!;
     }
 }
