@@ -12,10 +12,11 @@ namespace MinecraftServerShell.Core.Managers
     public class AppSettingsManager
     {
         public const string AppSettingsFileName = "settings.json";
+        internal static AppSettings AppSettings { get; set; } = null!;
 
         public static string SettingsFilePath() => Path.Combine(Environment.CurrentDirectory, AppSettingsFileName);
 
-        public static void CreateDefaultIfNotExist()
+        private static void CreateDefaultIfNotExist()
         {
             var path = SettingsFilePath();
 
@@ -27,8 +28,10 @@ namespace MinecraftServerShell.Core.Managers
 
         public static void SaveNewSettings(AppSettings settings)
         {
+            AppSettings = settings;
+
             var path = SettingsFilePath();
-            File.WriteAllText(path, JsonSerializer.Serialize(settings));
+            File.WriteAllText(path, JsonSerializer.Serialize(AppSettings));
         }
 
         public static AppSettings ReadOrCreateSettings()
@@ -36,7 +39,13 @@ namespace MinecraftServerShell.Core.Managers
             CreateDefaultIfNotExist();
 
             var content = File.ReadAllText(SettingsFilePath());
-            return JsonSerializer.Deserialize<AppSettings>(content);
+
+            if (AppSettings == null)
+            {
+                AppSettings = JsonSerializer.Deserialize<AppSettings>(content);
+            }
+           
+            return AppSettings;
         }
     }
 }
