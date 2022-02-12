@@ -82,22 +82,7 @@ namespace MCSS.BackupPlugin
             });
 
 
-            // From https://stackoverflow.com/questions/281640/how-do-i-get-a-human-readable-file-size-in-bytes-abbreviation-using-net
-            static string ReadableFileSizeFormatter(string filename)
-            {
-                string[] sizes = { "B", "KB", "MB", "GB", "TB" };
-                double len = new FileInfo(filename).Length;
-                int order = 0;
-                while (len >= 1024 && order < sizes.Length - 1)
-                {
-                    order++;
-                    len /= 1024;
-                }
-
-                // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
-                // show a single decimal place, and no space.
-                return string.Format("{0:0.##} {1}", len, sizes[order]);
-            }
+            
 
             // Describe backup
             BroadcastMessage("Stage 3/3 : Finalizing...");
@@ -106,11 +91,36 @@ namespace MCSS.BackupPlugin
             Directory.CreateDirectory(targetDirectory);
             File.Move(targetSavePath, targetZipPath);
 
-            File.WriteAllText(Path.Combine(targetDirectory, "info.json"), JsonSerializer.Serialize(new BackupEntry(name, issuer)));
+            var info = new BackupEntry
+            {
+                Id = Guid.NewGuid().ToString().Split('-').First(),
+                Name = name,
+                Issuer = issuer,
+                ArchiveSize = new FileInfo(targetZipPath).Length,
+                CreateTime = DateTime.Now.ToString("g"),
+            };
 
-            Main.Instance.LogManager.LogInfo($"Backup created, size: {ReadableFileSizeFormatter(targetZipPath)}");
-            BroadcastMessage($"Backup completed in {new TimeSpan(DateTime.Now.Ticks - startTime).TotalSeconds:0.00} seconds, total size is about {ReadableFileSizeFormatter(targetZipPath)}");
+            File.WriteAllText(Path.Combine(targetDirectory, "info.json"), JsonSerializer.Serialize(info));
+
+            Main.Instance.LogManager.LogInfo($"Backup created, size: {Utils.ReadableFileSizeFormatter(info.ArchiveSize)}");
+            BroadcastMessage($"Backup completed in {new TimeSpan(DateTime.Now.Ticks - startTime).TotalSeconds:0.00} seconds, total size is about {Utils.ReadableFileSizeFormatter(info.ArchiveSize)}");
             Main.Instance.IsIdle = true;
+        }
+
+        public static BackupEntry[] GetAllBackup()
+        {
+            var backupEntries = new List<BackupEntry>();
+            var backupRootDirectory = Path.Combine(AppSettingsManager.ReadOrCreateSettings().PluginDirectory, Resources.Name);
+
+            foreach (var info in new DirectoryInfo(backupRootDirectory).GetDirectories())
+            {
+                var profileText = File.ReadAllText(Path.Combine(info.FullName, "info.json"));
+                var entry = JsonSerializer.Deserialize<BackupEntry>(profileText);
+
+                backupEntries.Add(entry);
+            }
+
+            return backupEntries.ToArray();
         }
     }
 }
