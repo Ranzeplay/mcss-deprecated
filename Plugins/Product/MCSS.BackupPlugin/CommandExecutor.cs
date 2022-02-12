@@ -12,12 +12,18 @@ namespace MCSS.BackupPlugin
     {
         internal static async void CommandExecuteEvent_CommandExecution(object? sender, CommandExecutionEventArgs e)
         {
-            if (e.CommandName.ToLower() == "backup" && e.CommandArgs.Length > 1)
+            if (e.CommandName.ToLower() == "backup" && e.CommandArgs.Length >= 1)
             {
                 switch (e.CommandArgs[0].ToLower())
                 {
                     case "make":
-                        await BackupManager.CreateBackup(e.CommandArgs[1], e.Issuer);
+                        var name = "Unnamed backup";
+                        if(e.CommandArgs.Length > 1)
+                        {
+                            name = e.CommandArgs[1];
+                        }
+
+                        await BackupManager.CreateBackup(name, e.Issuer);
                         break;
                     case "rollback":
                         break;
