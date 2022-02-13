@@ -21,6 +21,7 @@ namespace MCSS.BackupPlugin
         {
             Main.Instance.LogManager.LogInfo("Creating backup");
 
+            // Cannot start more than one backup instance at the same time
             if (Main.Instance.IsIdle)
             {
                 // Set status
@@ -28,7 +29,8 @@ namespace MCSS.BackupPlugin
             }
             else
             {
-                ServerManager.SendConsoleMessage($"tell {issuer} There is already a backup task running...");
+                ServerManager.SendConsoleMessage($"tellraw {issuer} \"Oops, there is already a backup task running...\"");
+                return;
             }
 
             BroadcastMessage($"A backup operation has triggered by {issuer}, you may feel laggy for a while...");
@@ -48,28 +50,6 @@ namespace MCSS.BackupPlugin
             await Task.Run(() =>
             {
                 BroadcastMessage("Stage 1/3 : Copy world");
-                static void CopyWorldDirectory(string worldDirectory, string containingDirectory)
-                {
-                    if (!Directory.Exists(containingDirectory))
-                    {
-                        Directory.CreateDirectory(containingDirectory);
-                    }
-
-                    var directory = new DirectoryInfo(worldDirectory);
-                    foreach (var entry in directory.GetDirectories())
-                    {
-                        CopyWorldDirectory(entry.FullName, Path.Combine(containingDirectory, entry.Name));
-                    }
-
-                    foreach (var entry in directory.GetFiles())
-                    {
-                        if (entry.Name != "session.lock")
-                        {
-                            File.Copy(entry.FullName, Path.Combine(containingDirectory, entry.Name));
-                        }
-                    }
-                }
-
                 CopyWorldDirectory(worldSavePath, temporaryDirectory);
 
                 // Restart auto-save, because we have copied the server directory
@@ -81,8 +61,6 @@ namespace MCSS.BackupPlugin
                 Directory.Delete(temporaryDirectory, true);
             });
 
-
-            
 
             // Describe backup
             BroadcastMessage("Stage 3/3 : Finalizing...");
@@ -105,6 +83,28 @@ namespace MCSS.BackupPlugin
             Main.Instance.LogManager.LogInfo($"Backup created, size: {Utils.ReadableFileSizeFormatter(info.ArchiveSize)}");
             BroadcastMessage($"Backup completed in {new TimeSpan(DateTime.Now.Ticks - startTime).TotalSeconds:0.00} seconds, total size is about {Utils.ReadableFileSizeFormatter(info.ArchiveSize)}");
             Main.Instance.IsIdle = true;
+        }
+
+        private static void CopyWorldDirectory(string worldDirectory, string containingDirectory)
+        {
+            if (!Directory.Exists(containingDirectory))
+            {
+                Directory.CreateDirectory(containingDirectory);
+            }
+
+            var directory = new DirectoryInfo(worldDirectory);
+            foreach (var entry in directory.GetDirectories())
+            {
+                CopyWorldDirectory(entry.FullName, Path.Combine(containingDirectory, entry.Name));
+            }
+
+            foreach (var entry in directory.GetFiles())
+            {
+                if (entry.Name != "session.lock")
+                {
+                    File.Copy(entry.FullName, Path.Combine(containingDirectory, entry.Name));
+                }
+            }
         }
 
         public static BackupEntry[] GetAllBackup()
