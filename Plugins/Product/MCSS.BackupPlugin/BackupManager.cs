@@ -28,7 +28,7 @@ namespace MCSS.BackupPlugin
             }
             else
             {
-                ServerManager.SendConsoleMessage($"tell {issuer} There is already a runningbackup task...");
+                ServerManager.SendConsoleMessage($"tell {issuer} There is already a backup task running...");
             }
 
             BroadcastMessage($"A backup operation has triggered by {issuer}, you may feel laggy for a while...");
