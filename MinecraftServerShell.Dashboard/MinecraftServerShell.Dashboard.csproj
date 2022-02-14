@@ -20,17 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Managers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Properties\MCSS_Icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="call F:\Ranzeplay\MinecraftServerShell\MinecraftServerShell.Dashboard\Test\updatePlugins.bat" />
-  </Target>
 
 </Project>
