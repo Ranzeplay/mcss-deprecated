@@ -18,7 +18,6 @@ namespace MinecraftServerShell.Core.Events.ServerEvents.Gameplay.Player
 
     public class PlayerChatEventArgs : EventArgs
     {
-
         public string PlayerName { get; set; } = null!;
 
         public string ChatMessage { get; set; } = null!;

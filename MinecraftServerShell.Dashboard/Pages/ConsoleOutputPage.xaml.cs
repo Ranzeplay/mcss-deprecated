@@ -35,23 +35,28 @@ namespace MinecraftServerShell.Dashboard.Pages
 
         private async void ServerStartEvent_ServerStart(object? sender, ServerStartEventArgs e)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    SetServerControls(true);
+                });
+
                 Thread.Sleep(1000);
 
                 Core.InternalInstance.ServerProcess.BeginOutputReadLine();
-                Core.InternalInstance.ServerProcess.OutputDataReceived += (s, e) =>
+                Core.InternalInstance.ServerProcess.OutputDataReceived += async (s, e) =>
                 {
-                    Dispatcher.Invoke(() =>
+                    await Dispatcher.InvokeAsync(() =>
                     {
                         ServerOutputTextBlock.Text += $"{e.Data}\n";
                         OutputScrollViewer.ScrollToBottom();
                     });
                 };
 
-                Core.InternalInstance.ServerProcess.Exited += (s, e) =>
+                Core.InternalInstance.ServerProcess.Exited += async (s, e) =>
                 {
-                    Dispatcher.Invoke(() =>
+                    await Dispatcher.InvokeAsync(() =>
                     {
                         ServerOutputTextBlock.Text += $"[Process has exited with code {Core.InternalInstance.ServerProcess.ExitCode}]\n";
                         SetServerControls(false);
@@ -63,7 +68,6 @@ namespace MinecraftServerShell.Dashboard.Pages
         private void StartServerButton_Click(object sender, RoutedEventArgs e)
         {
             ServerManager.StartServer();
-            SetServerControls(true);
         }
 
         private void SendCommandButton_Click(object sender, RoutedEventArgs e)
