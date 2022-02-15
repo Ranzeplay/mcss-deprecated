@@ -30,7 +30,7 @@ namespace MCSS.BackupPlugin
             }
             else
             {
-                ServerManager.SendConsoleMessage($"tellraw {issuer} \"Oops, there is already a backup task running...\"");
+                ServerManager.SendConsoleMessage($"tellraw {issuer} \"Oops, there is already a backup or rollback task running...\"");
                 return;
             }
 
@@ -106,6 +106,17 @@ namespace MCSS.BackupPlugin
             var backupPath = Path.Combine(Main.Instance.PluginDataPath, backupId.ToLower());
             var zipPath = Path.Combine(backupPath, backupZipName);
 
+            if (Main.Instance.IsIdle)
+            {
+                // Set status
+                Main.Instance.IsIdle = false;
+            }
+            else
+            {
+                ServerManager.SendConsoleMessage($"tellraw {issuer} \"Oops, there is already a backup or rollback task running...\"");
+                return;
+            }
+
             if (!File.Exists(zipPath))
             {
                 ServerManager.SendConsoleMessage($"tellraw {issuer} \"Failed to rollback, backup {backupId} not found.\"");
@@ -113,6 +124,7 @@ namespace MCSS.BackupPlugin
 
             await Task.Run(() =>
             {
+                var temporaryDirectory = Path.Combine(Main.Instance.PluginDataPath, "backup-temp");
                 Main.Instance.LogManager.LogInfo($"A rollback operation has initiated by {issuer}");
                 BroadcastMessage($"{issuer} has just initiated a rollback operation");
 
@@ -128,6 +140,9 @@ namespace MCSS.BackupPlugin
 
                 // Remove current world directory
                 Main.Instance.LogManager.LogInfo($"Server stopped, executing rollback offline...");
+
+                // Backup current directory
+                Utils.CopyDirectory(worldSavePath, temporaryDirectory);
                 Directory.Delete(worldSavePath, true);
 
                 Directory.CreateDirectory(worldSavePath);
@@ -135,6 +150,9 @@ namespace MCSS.BackupPlugin
 
                 Main.Instance.LogManager.LogInfo($"Rollback complete, starting server");
                 ServerManager.StartServer();
+                Directory.Delete(temporaryDirectory, true);
+
+                Main.Instance.IsIdle = true;
             });
         }
     }
