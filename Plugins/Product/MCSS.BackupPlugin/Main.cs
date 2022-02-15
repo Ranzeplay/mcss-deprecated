@@ -23,8 +23,6 @@ namespace MCSS.BackupPlugin
             LogManager.LogInfo("Plugin has been loaded!");
         }
 
-        
-
         public void OnPluginUnload()
         {
             LogManager.LogInfo("Plugin has been unloaded!");

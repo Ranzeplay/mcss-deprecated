@@ -26,6 +26,10 @@ namespace MCSS.BackupPlugin
                         await BackupManager.CreateBackup(name, e.Issuer);
                         break;
                     case "rollback":
+                        if (e.CommandArgs.Length > 1)
+                        {
+                            await BackupManager.RollbackBackup(e.CommandArgs[1], e.Issuer);
+                        }
                         break;
                     case "list":
                         var backupList = BackupManager.GetAllBackup();

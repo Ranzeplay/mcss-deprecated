@@ -1,5 +1,4 @@
-﻿using MCSS.BackupPlugin.Properties;
-using MinecraftServerShell.Core.Managers;
+﻿using MinecraftServerShell.Core.Managers;
 using System;
 using System.Collections.Generic;
 using System.IO.Compression;
@@ -12,6 +11,8 @@ namespace MCSS.BackupPlugin
 {
     internal class BackupManager
     {
+        private static readonly string backupZipName = "backup.zip";
+
         private static void BroadcastMessage(string content)
         {
             ServerManager.SendConsoleMessage($"tellraw @a \"[Backup] {content}\"");
@@ -41,9 +42,9 @@ namespace MCSS.BackupPlugin
             var backupId = Guid.NewGuid().ToString().Split('-').First();
             var worldSavePath = Path.Combine(AppSettingsManager.ReadOrCreateSettings().ServerDirectory, "world");
             var temporaryDirectory = Path.Combine(Main.Instance.PluginDataPath, "backup-temp");
-            var targetDirectory = Path.Combine(Main.Instance.PluginDataPath, Resources.Name, backupId);
-            var targetZipPath = Path.Combine(targetDirectory, "backup.zip");
-            
+            var targetDirectory = Path.Combine(Main.Instance.PluginDataPath, backupId);
+            var targetZipPath = Path.Combine(targetDirectory, backupZipName);
+
 
             // Disable auto-save
             ServerManager.SendConsoleMessage("save-off");
@@ -66,7 +67,7 @@ namespace MCSS.BackupPlugin
             });
 
             BroadcastMessage("Stage 3/3 : Finalizing...");
-            
+
             // Save backup profile
             var info = new BackupEntry
             {
@@ -83,34 +84,12 @@ namespace MCSS.BackupPlugin
             Main.Instance.IsIdle = true;
         }
 
-        private static void CopyWorldDirectory(string worldDirectory, string containingDirectory)
-        {
-            if (!Directory.Exists(containingDirectory))
-            {
-                Directory.CreateDirectory(containingDirectory);
-            }
 
-            var directory = new DirectoryInfo(worldDirectory);
-            foreach (var entry in directory.GetDirectories())
-            {
-                CopyWorldDirectory(entry.FullName, Path.Combine(containingDirectory, entry.Name));
-            }
-
-            foreach (var entry in directory.GetFiles())
-            {
-                if (entry.Name != "session.lock")
-                {
-                    File.Copy(entry.FullName, Path.Combine(containingDirectory, entry.Name));
-                }
-            }
-        }
 
         public static BackupEntry[] GetAllBackup()
         {
             var backupEntries = new List<BackupEntry>();
-            var backupRootDirectory = Path.Combine(AppSettingsManager.ReadOrCreateSettings().PluginDirectory, Resources.Name);
-
-            foreach (var info in new DirectoryInfo(backupRootDirectory).GetDirectories())
+            foreach (var info in new DirectoryInfo(Main.Instance.PluginDataPath).GetDirectories())
             {
                 var profileText = File.ReadAllText(Path.Combine(info.FullName, "info.json"));
                 var entry = JsonSerializer.Deserialize<BackupEntry>(profileText);
@@ -119,6 +98,41 @@ namespace MCSS.BackupPlugin
             }
 
             return backupEntries.ToArray();
+        }
+
+        public static async Task RollbackBackup(string backupId, string issuer)
+        {
+            var worldSavePath = Path.Combine(AppSettingsManager.ReadOrCreateSettings().ServerDirectory, "world");
+            var backupPath = Path.Combine(Main.Instance.PluginDataPath, backupId.ToLower());
+            var zipPath = Path.Combine(backupPath, backupZipName);
+
+            if (!File.Exists(zipPath))
+            {
+                ServerManager.SendConsoleMessage($"tellraw {issuer} \"Failed to rollback, backup {backupId} not found.\"");
+            }
+
+            await Task.Run(() =>
+            {
+                BroadcastMessage($"{issuer} has just initiated a rollback operation");
+
+                // Countdown (10s)
+                for (int i = 10; i > 0; i--)
+                {
+                    BroadcastMessage($"{i} second(s) to server close");
+                    Thread.Sleep(1000);
+                }
+
+                ServerManager.StopServer();
+                MinecraftServerShell.Core.InternalInstance.ServerProcess.WaitForExit();
+
+                // Remove current world directory
+                Directory.Delete(worldSavePath, true);
+
+                Directory.CreateDirectory(worldSavePath);
+                ZipFile.ExtractToDirectory(zipPath, worldSavePath);
+
+                ServerManager.StartServer();
+            });
         }
     }
 }
