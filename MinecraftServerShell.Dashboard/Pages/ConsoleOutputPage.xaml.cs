@@ -1,9 +1,11 @@
-﻿using MinecraftServerShell.Core.Managers;
+﻿using MinecraftServerShell.Core.Events.ServerEvents;
+using MinecraftServerShell.Core.Managers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,32 +29,41 @@ namespace MinecraftServerShell.Dashboard.Pages
             InitializeComponent();
 
             SetServerControls(false);
+
+            ServerStartEvent.ServerStart += ServerStartEvent_ServerStart;
+        }
+
+        private async void ServerStartEvent_ServerStart(object? sender, ServerStartEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+
+                Core.InternalInstance.ServerProcess.BeginOutputReadLine();
+                Core.InternalInstance.ServerProcess.OutputDataReceived += (s, e) =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        ServerOutputTextBlock.Text += $"{e.Data}\n";
+                        OutputScrollViewer.ScrollToBottom();
+                    });
+                };
+
+                Core.InternalInstance.ServerProcess.Exited += (s, e) =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        ServerOutputTextBlock.Text += $"[Process has exited with code {Core.InternalInstance.ServerProcess.ExitCode}]\n";
+                        SetServerControls(false);
+                    });
+                };
+            });
         }
 
         private void StartServerButton_Click(object sender, RoutedEventArgs e)
         {
             ServerManager.StartServer();
-
             SetServerControls(true);
-
-            Core.InternalInstance.ServerProcess.BeginOutputReadLine();
-            Core.InternalInstance.ServerProcess.OutputDataReceived += (s, e) =>
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    ServerOutputTextBlock.Text += $"{e.Data}\n";
-                    OutputScrollViewer.ScrollToBottom();
-                });
-            };
-
-            Core.InternalInstance.ServerProcess.Exited += (s, e) =>
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    ServerOutputTextBlock.Text += $"[Process has exited with code {Core.InternalInstance.ServerProcess.ExitCode}]\n";
-                    SetServerControls(false);
-                });
-            };
         }
 
         private void SendCommandButton_Click(object sender, RoutedEventArgs e)

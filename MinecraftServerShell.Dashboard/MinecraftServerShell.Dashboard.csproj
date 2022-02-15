@@ -5,10 +5,15 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>MCSS-Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Properties\MCSS_Icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MCSS-Icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
