@@ -113,6 +113,7 @@ namespace MCSS.BackupPlugin
 
             await Task.Run(() =>
             {
+                Main.Instance.LogManager.LogInfo($"A rollback operation has initiated by {issuer}");
                 BroadcastMessage($"{issuer} has just initiated a rollback operation");
 
                 // Countdown (10s)
@@ -126,11 +127,13 @@ namespace MCSS.BackupPlugin
                 MinecraftServerShell.Core.InternalInstance.ServerProcess.WaitForExit();
 
                 // Remove current world directory
+                Main.Instance.LogManager.LogInfo($"Server stopped, executing rollback offline...");
                 Directory.Delete(worldSavePath, true);
 
                 Directory.CreateDirectory(worldSavePath);
                 ZipFile.ExtractToDirectory(zipPath, worldSavePath);
 
+                Main.Instance.LogManager.LogInfo($"Rollback complete, starting server");
                 ServerManager.StartServer();
             });
         }
