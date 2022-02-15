@@ -11,10 +11,12 @@ namespace MCSS.BackupPlugin
 
         internal PluginLogManager LogManager = new(Resources.Name);
         internal bool IsIdle = true;
+        internal string PluginDataPath = null!;
 
         public void OnPluginLoad()
         {
             Instance = this;
+            PluginDataPath = Path.Combine(AppSettingsManager.ReadOrCreateSettings().PluginDirectory, Resources.Name);
 
             CommandExecuteEvent.CommandExecution += CommandExecutor.CommandExecuteEvent_CommandExecution;
 

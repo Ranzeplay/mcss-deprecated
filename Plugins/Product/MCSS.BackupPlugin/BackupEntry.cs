@@ -17,13 +17,13 @@ namespace MCSS.BackupPlugin
         //     Id = Guid.NewGuid().ToString().Split('-')[0];
         // }
 
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public string Issuer { get; set; }
+        public string Issuer { get; set; } = null!;
 
-        public string CreateTime { get; set; }
+        public string CreateTime { get; set; } = null!;
 
         public long ArchiveSize { get; set; }
     }

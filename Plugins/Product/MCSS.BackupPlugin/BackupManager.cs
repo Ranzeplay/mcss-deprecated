@@ -14,7 +14,7 @@ namespace MCSS.BackupPlugin
     {
         private static void BroadcastMessage(string content)
         {
-            ServerManager.SendConsoleMessage($"say [Backup] {content}");
+            ServerManager.SendConsoleMessage($"tellraw @a \"[Backup] {content}\"");
         }
 
         internal static async Task CreateBackup(string name, string issuer)
@@ -38,9 +38,12 @@ namespace MCSS.BackupPlugin
             // Record time
             var startTime = DateTime.Now.Ticks;
 
+            var backupId = Guid.NewGuid().ToString().Split('-').First();
             var worldSavePath = Path.Combine(AppSettingsManager.ReadOrCreateSettings().ServerDirectory, "world");
-            var temporaryDirectory = Path.Combine(AppSettingsManager.ReadOrCreateSettings().PluginDirectory, Resources.Name, "backup-temp");
-            var targetSavePath = Path.Combine(AppSettingsManager.ReadOrCreateSettings().PluginDirectory, Resources.Name, "target.zip");
+            var temporaryDirectory = Path.Combine(Main.Instance.PluginDataPath, "backup-temp");
+            var targetDirectory = Path.Combine(Main.Instance.PluginDataPath, Resources.Name, backupId);
+            var targetZipPath = Path.Combine(targetDirectory, "backup.zip");
+            
 
             // Disable auto-save
             ServerManager.SendConsoleMessage("save-off");
@@ -50,34 +53,29 @@ namespace MCSS.BackupPlugin
             await Task.Run(() =>
             {
                 BroadcastMessage("Stage 1/3 : Copy world");
-                CopyWorldDirectory(worldSavePath, temporaryDirectory);
+                Utils.CopyDirectory(worldSavePath, temporaryDirectory);
 
                 // Restart auto-save, because we have copied the server directory
                 ServerManager.SendConsoleMessage("save-on");
 
-                BroadcastMessage("Stage 2/3 : World copied, compressing world...");
-                ZipFile.CreateFromDirectory(temporaryDirectory, targetSavePath);
+                BroadcastMessage("Stage 2/3 : Compress world...");
+                Directory.CreateDirectory(targetDirectory);
+                ZipFile.CreateFromDirectory(temporaryDirectory, targetZipPath);
 
                 Directory.Delete(temporaryDirectory, true);
             });
 
-
-            // Describe backup
             BroadcastMessage("Stage 3/3 : Finalizing...");
-            var targetDirectory = Path.Combine(Directory.GetParent(targetSavePath).FullName, Guid.NewGuid().ToString().Split('-')[0]);
-            var targetZipPath = Path.Combine(targetDirectory, new FileInfo(targetSavePath).Name);
-            Directory.CreateDirectory(targetDirectory);
-            File.Move(targetSavePath, targetZipPath);
-
+            
+            // Save backup profile
             var info = new BackupEntry
             {
-                Id = Guid.NewGuid().ToString().Split('-').First(),
+                Id = backupId,
                 Name = name,
                 Issuer = issuer,
                 ArchiveSize = new FileInfo(targetZipPath).Length,
                 CreateTime = DateTime.Now.ToString("g"),
             };
-
             File.WriteAllText(Path.Combine(targetDirectory, "info.json"), JsonSerializer.Serialize(info));
 
             Main.Instance.LogManager.LogInfo($"Backup created, size: {Utils.ReadableFileSizeFormatter(info.ArchiveSize)}");
