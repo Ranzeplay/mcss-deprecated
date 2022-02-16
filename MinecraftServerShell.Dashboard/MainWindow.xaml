@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MinecraftServerShell.Dashboard"
         mc:Ignorable="d"
-        Title="MinecraftServerShell" Height="450" Width="800" Icon="/Properties/MCSS_Icon.ico">
+        Icon="/Properties/MCSS_Icon.ico"
+        Loaded="Window_Loaded"
+        Title="MinecraftServerShell" Height="450" Width="800" >
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem>

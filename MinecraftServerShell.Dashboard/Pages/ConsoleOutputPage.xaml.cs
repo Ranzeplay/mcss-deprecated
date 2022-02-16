@@ -35,6 +35,8 @@ namespace MinecraftServerShell.Dashboard.Pages
 
         private async void ServerStartEvent_ServerStart(object? sender, ServerStartEventArgs e)
         {
+            InternalInstance.AppStatus.UpdateValue("Server Running");
+
             await Task.Run(async () =>
             {
                 await Dispatcher.InvokeAsync(() =>
@@ -60,6 +62,7 @@ namespace MinecraftServerShell.Dashboard.Pages
                     {
                         ServerOutputTextBlock.Text += $"[Process has exited with code {Core.InternalInstance.ServerProcess.ExitCode}]\n";
                         SetServerControls(false);
+                        InternalInstance.AppStatus.UpdateValue("Idle");
                     });
                 };
             });
@@ -68,6 +71,7 @@ namespace MinecraftServerShell.Dashboard.Pages
         private void StartServerButton_Click(object sender, RoutedEventArgs e)
         {
             ServerManager.StartServer();
+            InternalInstance.StatusBarText.UpdateValue("Server starting");
         }
 
         private void SendCommandButton_Click(object sender, RoutedEventArgs e)
@@ -78,6 +82,7 @@ namespace MinecraftServerShell.Dashboard.Pages
         private void StopServerButton_Click(object sender, RoutedEventArgs e)
         {
             ServerManager.StopServer();
+            InternalInstance.StatusBarText.UpdateValue("Stopping server");
         }
 
         private void SetServerControls(bool value)
@@ -108,6 +113,10 @@ namespace MinecraftServerShell.Dashboard.Pages
         private void ClearOutputButton_Click(object sender, RoutedEventArgs e)
         {
             ServerOutputTextBlock.Text = string.Empty;
+            Dispatcher.Invoke(() =>
+            {
+                InternalInstance.StatusBarText.UpdateValue("Output cleared");
+            });
         }
 
         private void KillServerButton_Click(object sender, RoutedEventArgs e)
@@ -117,7 +126,13 @@ namespace MinecraftServerShell.Dashboard.Pages
             Dispatcher.Invoke(() =>
             {
                 ServerOutputTextBlock.Text += $"[Killing server process]\n";
+                InternalInstance.StatusBarText.UpdateValue("Killing server");
             });
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            InternalInstance.StatusBarText.UpdateValue("Ready");
         }
     }
 }

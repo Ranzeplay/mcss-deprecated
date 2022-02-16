@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace MinecraftServerShell.Dashboard
 {
-    public static class InternalInstance
+    internal static class InternalInstance
     {
-        public static ConsoleOutputPage ConsoleOutputPage { get; set; } = new();
+        internal static ConsoleOutputPage ConsoleOutputPage { get; set; } = new();
 
-        public static LogPage LogPage { get; set; } = new();
+        internal static LogPage LogPage { get; set; } = new();
 
-        public static string StatusbarText { get; set; } = "Loading...";
+        internal static ChangeBroadcast<string> StatusBarText { get; set; } = new();
+
+        internal static ChangeBroadcast<string> AppStatus { get; set; } = new();
     }
 }

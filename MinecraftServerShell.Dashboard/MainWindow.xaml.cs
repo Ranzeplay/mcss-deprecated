@@ -52,5 +52,21 @@ namespace MinecraftServerShell.Dashboard
         private void ShowPluginsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = new PluginListPage();
 
         private void ShowLogsButton_Click(object sender, RoutedEventArgs e) => FrameView.Content = InternalInstance.LogPage;
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Make these field modifiable
+            InternalInstance.StatusBarText.ValueChange += (s, e) =>
+            {
+                StatusBar.Text = $"{e} ({DateTime.Now.ToShortTimeString()})";
+            };
+
+            InternalInstance.AppStatus.ValueChange += (s, e) =>
+            {
+                Title = $"MinecraftServerShell - {e}";
+            };
+
+            InternalInstance.AppStatus.UpdateValue("Idle");
+        }
     }
 }
