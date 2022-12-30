@@ -1,3 +1,5 @@
+![Icon](./MinecraftServerShell.Dashboard/MCSS-Icon.ico)
+
 # MinecraftServerShell
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/Ranzeplay/MinecraftServerShell)
