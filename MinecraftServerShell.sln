@@ -17,6 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{369E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCSS.BackupPlugin", "Plugins\Product\MCSS.BackupPlugin\MCSS.BackupPlugin.csproj", "{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RawJsonLib", "RawJsonLib", "{30A6792E-E581-446C-8436-DACE02504584}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinecraftServer.RawJsonLib", "RawJsonLib\MinecraftServer.RawJsonLib\MinecraftServer.RawJsonLib.csproj", "{40175DB7-CEB0-4BC9-8081-D6C86DFEE061}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinecraftServer.RawJsonLib.Tests", "Tests\MinecraftServer.RawJsonLib.Tests\MinecraftServer.RawJsonLib.Tests.csproj", "{9DC3234C-9F5C-4E45-A4FB-081655E3F94D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +45,14 @@ Global
 		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40175DB7-CEB0-4BC9-8081-D6C86DFEE061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40175DB7-CEB0-4BC9-8081-D6C86DFEE061}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40175DB7-CEB0-4BC9-8081-D6C86DFEE061}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40175DB7-CEB0-4BC9-8081-D6C86DFEE061}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DC3234C-9F5C-4E45-A4FB-081655E3F94D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC3234C-9F5C-4E45-A4FB-081655E3F94D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC3234C-9F5C-4E45-A4FB-081655E3F94D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC3234C-9F5C-4E45-A4FB-081655E3F94D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,8 +62,11 @@ Global
 		{16CBA29A-1391-4743-B82D-37108EB48221} = {5C1DC2EE-BE65-4772-BB09-7C3E09DF623C}
 		{369EBDBC-3E52-45FA-A391-199AB7FA5E7E} = {A407CCF8-E358-46A0-BCC9-335A6F920F28}
 		{97E0DDFB-2F7D-4F1E-B6C4-C2191C427E6E} = {369EBDBC-3E52-45FA-A391-199AB7FA5E7E}
+		{40175DB7-CEB0-4BC9-8081-D6C86DFEE061} = {30A6792E-E581-446C-8436-DACE02504584}
+		{9DC3234C-9F5C-4E45-A4FB-081655E3F94D} = {30A6792E-E581-446C-8436-DACE02504584}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44DF7D58-11CC-4DF9-925D-AAC64C536436}
+		RESX_PrefixTranslations = False
 	EndGlobalSection
 EndGlobal
